@@ -1,0 +1,35 @@
+
+@hostname=http://localhost:3001
+GET {{hostname}}
+
+###
+// User SignIn
+POST {{hostname}}/api/v1/auth/signin
+Content-Type: application/json
+
+{
+    "userName":"toan",
+    "passWord": "123"
+}
+
+###
+// Get all users
+GET {{hostname}}/api/v1/users
+
+###
+// Get one user
+GET {{hostname}}/api/v1/users/60912533c6e93605886ab60f
+
+###
+
+POST {{hostname}}/api/v1/users
+Content-Type: application/json
+
+{ 
+    "userName": "toan",
+    "passWord": "123"
+}
+
+###
+
+GET {{hostname}}/api/v1/majors
