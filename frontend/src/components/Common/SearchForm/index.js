@@ -1,15 +1,15 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, Paper, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
 
 function SearchForm() {
 
-    //const token = useSelector(state => state.auth.token);
+    const token = useSelector(state => state.auth.token);
     const [openDialog, setOpenDialog] = useState(false);
-    const [ token, setToken] = useState('asdf');
 
     function handleSendPost() {
         if (token) {
@@ -29,7 +29,6 @@ function SearchForm() {
 
     return (
         <Paper style={{ padding: '1rem' }} elevation={2}>
-            { console.log('token', token)}
             <Grid item>
                 <Button
                     onClick={handleOpen}
@@ -46,19 +45,18 @@ function SearchForm() {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Yêu cầu đăng nhập"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Let Google help apps determine location. This means sending anonymous location data to
-                            Google, even when no apps are running.
+                            Bạn cần phải đăng nhập để tiếp tục !
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Disagree
+                        <Button onClick={handleClose} color="primary" >
+                            Huỷ
                         </Button>
-                        <Button onClick={handleClose} color="primary" autoFocus>
-                            Agree
+                        <Button color="primary" autoFocus>
+                            <Link to={token ? '/tac-gia' : '/dang-nhap' } style={{ textDecoration: 'none' }}>Đăng nhập</Link>
                         </Button>
                     </DialogActions>
                 </Dialog>

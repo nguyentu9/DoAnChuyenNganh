@@ -4,7 +4,7 @@ import cors from 'cors'
 import connectDB from './config/db.js'
 
 
-import bcrypt from 'bcrypt'
+
 import { User } from './models/userModel.js'
 import { Major } from './models/majorModel.js';
 import { Degree } from './models/degreeModel.js';
@@ -70,10 +70,21 @@ app.post('/api/v1/auth/signin', async (req, res) => {
 })
 
 app.post('api/v1/auth/signup', async (req, res) => {
-    const {userName, passWord, fullName, phone, emailAddr, major, degree, office, address} = req.body;
-    if(!userName || !passWord || !fullName || !phone || !emailAddr || !major || !degree || !office || address) return;
-    const user = await findOne({ userName });
-    
+    const { userName, passWord, fullName, phone, emailAddr, major, degree, office, address } = req.body;
+    if (!userName.trim() || !passWord.trim() || !fullName.trim() || !phone.trim()
+        || !emailAddr.trim() || !major.trim() || !degree.trim() || !office.trim() || !address.trim()) return;
+
+    const user = await User.findOne({ userName });
+    console.log(user);
+    if (user.trim()) {
+        res.json({ message: 'Tên đăng nhập đã tồn tại' });
+    }
+
+    try {
+        await User.create({ userName, passWord })
+    } catch (err) {
+        console.error(err);
+    }
 })
 
 

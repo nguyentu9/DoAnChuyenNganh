@@ -110,8 +110,9 @@ function SignUp() {
                                 <TextField
                                     id="userName"
                                     name="userName"
-                                    label="Tên đăng nhập (viết không dấu)"
+                                    label="Tên đăng nhập (viết không dấu, không khoảng trắng)"
                                     variant="outlined"
+                                    margin="dense"
                                     required
                                     fullWidth
                                     autoFocus
@@ -127,6 +128,7 @@ function SignUp() {
                                     name="passWord"
                                     label="Mật khẩu"
                                     variant="outlined"
+                                    margin="dense"
                                     required
                                     fullWidth
                                     type="password"
@@ -142,6 +144,7 @@ function SignUp() {
                                     name="confirmPassword"
                                     label="Nhập lại mật khẩu"
                                     variant="outlined"
+                                    margin="dense"
                                     required
                                     fullWidth
                                     type="password"
@@ -157,6 +160,7 @@ function SignUp() {
                                     name="fullName"
                                     label="Họ tên"
                                     variant="outlined"
+                                    margin="dense"
                                     required
                                     fullWidth
                                     autoFocus
@@ -172,6 +176,7 @@ function SignUp() {
                                     name="phone"
                                     label="Điện thoại"
                                     variant="outlined"
+                                    margin="dense"
                                     type="tel"
                                     required
                                     fullWidth
@@ -188,6 +193,7 @@ function SignUp() {
                                     label="Email"
                                     variant="outlined"
                                     type="email"
+                                    margin="dense"
                                     required
                                     fullWidth
                                     value={formik.values.emailAddr}
@@ -232,9 +238,9 @@ function SignUp() {
                                     error={formik.touched.degree && Boolean(formik.errors.degree)}
                                     helperText={formik.touched.degree && formik.errors.degree}
                                 >
-                                    <MenuItem value="">
+                                    {/* <MenuItem value="">
                                         <em>Không</em>
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     {
                                         degreeList && degreeList.map((degree) => (
                                             <MenuItem key={degree._id} value={degree.degreeName}>{degree.degreeName}</MenuItem>
@@ -247,6 +253,7 @@ function SignUp() {
                                     id="office"
                                     name="office"
                                     label="Đơn vị"
+                                    margin="dense"
                                     variant="outlined"
                                     type="text"
                                     required
@@ -264,6 +271,7 @@ function SignUp() {
                                     label="Địa chỉ"
                                     variant="outlined"
                                     type="text"
+                                    margin="dense"
                                     required
                                     fullWidth
                                     value={formik.values.address}

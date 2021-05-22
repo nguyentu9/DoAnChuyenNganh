@@ -17,7 +17,6 @@ const validationSchema = {
     passWord: yup
         .string()
         //.matches(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/, 'Mật khẩu không được chứa ký tự đặc biệt')
-        //.min(8, 'Mật khẩu phải đủ 8 ký tự trở lên')
         .required('Mật khẩu không được rỗng'),
 }
 
@@ -42,14 +41,13 @@ function SignIn() {
         },
     })
 
-    if(token !== null){
-        return <Redirect to='/tac-gia' />
-        // return history.push('/tac-gia');
-    }
+    // if(token !== null){
+    //     return <Redirect to='/tac-gia' />
+    // }
 
     return (
         <Container component="main" maxWidth="xs">
-            {/* { token && <Redirect to='/tac-gia' />} */}
+            { token && <Redirect to='/tac-gia' />}
 
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>

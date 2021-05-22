@@ -1,25 +1,15 @@
-import { Avatar, Menu, MenuItem } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
+import { Avatar, Menu, MenuItem, AppBar, Badge, Container, Divider, Drawer, Grid, Paper, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { Route, Switch } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import clsx from 'classnames';
 import React, { useState } from 'react';
 import Deposits from './Deposits';
-import ListMenu from '../../components/Dashboard/ListMenu';
+import ListMenu from './ListMenu';
 import Orders from './Orders';
-
+import SendArticle from './Author/SendArticle';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -97,25 +87,23 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 240,
+        height: 150,
     },
 }));
 
 export default function Dashboard() {
     const classes = useStyles();
     const [open, setOpen] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
 
     const handleClose = () => {
         setAnchorEl(null);
     };
-
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -126,7 +114,7 @@ export default function Dashboard() {
 
     return (
         <div className={classes.root}>
-            <CssBaseline />
+
             <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
                 <Toolbar className={classes.toolbar}>
                     <IconButton
@@ -173,6 +161,7 @@ export default function Dashboard() {
             </AppBar>
 
 
+
             <Drawer
                 variant="permanent"
                 classes={{
@@ -186,36 +175,63 @@ export default function Dashboard() {
                     </IconButton>
                 </div>
                 <Divider />
-
                 <ListMenu />
-
             </Drawer>
-
-
 
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Paper className={fixedHeightPaper}>
-                                {/* <Chart /> */}
-                            </Paper>
-                        </Grid>
-                        {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                {/* <Deposits /> */}
-                            </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            {/* <Paper className={classes.paper}>
-                <Orders />
-              </Paper> */}
-                        </Grid>
-                    </Grid>
+
+
+                    <Switch>
+                        <Route exact path="/tac-gia/gui-bai-bao">
+                            <SendArticle />
+                        </Route>
+
+                        <Route exact path="/tac-gia/tat-ca-bai-bao">
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} md={4} lg={3}>
+                                    <Paper className={fixedHeightPaper}>
+                                        <Deposits />
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={12} md={8} lg={9}>
+                                    <Paper className={fixedHeightPaper}>
+                                        {/* <Chart /> */}
+                                    </Paper>
+                                </Grid>
+                                {/* Recent Orders */}
+                                <Grid item xs={12}>
+                                    <Paper className={classes.paper}>
+                                        <Orders />
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+                        </Route>
+
+                        <Route exact path="/tac-gia/bai-bao-da-gui">
+
+                        </Route>
+
+                        <Route exact path="/tac-gia/xem-phan-bien">
+
+                        </Route>
+
+
+
+
+                        <Route exact path="/phan-bien/phan-bien-bai-bao">
+
+                        </Route>
+
+                        <Route exact path="/phan-bien/chap-nhan-chinh-sua">
+
+                        </Route>
+                        <Route exact path="/phan-bien/bai-bao-da-phan-bien">
+
+                        </Route>
+
+                    </Switch>
                 </Container>
             </main>
         </div>
