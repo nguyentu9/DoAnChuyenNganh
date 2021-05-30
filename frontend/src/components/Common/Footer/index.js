@@ -11,7 +11,7 @@ function Footer() {
             
             <footer className={classes.footer}>
                 <Container maxWidth="sm">
-                    <Typography variant="body1">My sticky footer can be found here.</Typography>
+                    <Typography variant="body1">&copy;Copyright 2021 HuynhToan</Typography>
                 </Container>
             </footer>
         </div>

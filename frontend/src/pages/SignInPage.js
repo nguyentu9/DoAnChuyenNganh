@@ -12,10 +12,12 @@ import { login } from '../redux/auth';
 const validationSchema = {
     userName: yup
         .string()
+        .trim()
         //.matches(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/, 'Tên đăng nhập không được chứa ký tự đặc biệt')
         .required('Tên đăng nhập không được rỗng'),
     passWord: yup
         .string()
+        .trim()
         //.matches(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/, 'Mật khẩu không được chứa ký tự đặc biệt')
         .required('Mật khẩu không được rỗng'),
 }
