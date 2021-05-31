@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const typeSchema = mongoose.Schema({
-    typeName: {
+    name: {
         type: String,
         unique: true
     }
@@ -12,4 +12,3 @@ const typeSchema = mongoose.Schema({
 const Type = mongoose.model('Type', typeSchema);
 
 export { typeSchema, Type };
-

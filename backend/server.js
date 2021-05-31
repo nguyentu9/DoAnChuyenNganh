@@ -1,23 +1,23 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
 import connectDB from './config/db.js'
+import path, { dirname } from 'path';
 
-
-
+import upload from './services/upload.js';
 import { User } from './models/userModel.js'
 import { Major } from './models/majorModel.js';
 import { Degree } from './models/degreeModel.js';
 
 import jwt from 'jsonwebtoken'
-
+import { Type } from './models/typeModel.js';
 dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static( 'public'));
 connectDB();
 const PORT = process.env.PORT || 3001;
 
@@ -53,6 +53,8 @@ app.post('/api/v1/auth/signin', async (req, res) => {
             message: 'Tài khoản hoặc mật khẩu sai'
         })
     }
+
+
 
     let { _id: id, isAdmin } = user;
     const token = await jwt.sign(
@@ -132,6 +134,26 @@ app.get('/api/v1/hotArticles', (req, res) => {
 
 app.get('/api/v1/newsestArticles', (req, res) => {
 
+})
+
+app.get('/api/v1/articleTypes', async (req, res) => {
+    try {
+        const types = await Type.find();
+        res.json(types);
+    } catch (err) {
+        console.error(err);
+    }
+})
+
+// need to put middleware check isUser before add a new article
+app.post('/api/v1/article', upload.single('file'), (req, res) => {
+    res.json(req.file);
+
+        // res.send({
+    //     status: true,
+    //     message: 'file uploaded',
+    //     fileNameInServer: newFullPath
+    // })
 })
 
 

@@ -33,3 +33,15 @@ Content-Type: application/json
 ###
 
 GET {{hostname}}/api/v1/majors
+
+###
+
+GET {{hostname}}/api/v1/articleTypes
+
+
+###
+
+POST {{hostname}}/api/v1/article
+Content-Type: application/json
+
+{"title":"adsf","brief":"sdf","keyWord":"asd","type":"","authors":""}
