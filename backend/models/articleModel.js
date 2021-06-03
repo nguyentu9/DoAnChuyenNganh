@@ -50,4 +50,4 @@ const articleSchema = mongoose.Schema({
 const Article = mongoose.model('Article', articleSchema);
 
 
-export default { articleSchema, Article };
+export { articleSchema, Article };

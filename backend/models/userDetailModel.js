@@ -16,14 +16,18 @@ const userDetailSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    degreeID: degreeSchema,
-    majorID: majorSchema,
+    degree: degreeSchema,
+    major: majorSchema,
     email: {
         type: String,
         required: true,
         unique: true
     },
     phone: {
+        type: String,
+        required: true
+    },
+    oganization: {
         type: String,
         required: true
     }
