@@ -1,53 +1,67 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-const articleSchema = mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-        unique: true
+const articleSchema = mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        brief: {
+            type: String,
+            required: true,
+        },
+        keyWord: [
+            {
+                type: String,
+                default: [],
+            },
+        ],
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Type',
+            },
+        ],
+        articleDownloads: {
+            type: Number,
+            default: 0,
+        },
+        articleViews: {
+            type: Number,
+            default: 0,
+        },
+        receivedDate: {
+            type: Date,
+            default: Date.now(),
+        },
+        publishedDate: {
+            type: Date,
+            default: Date.now(),
+        },
+        author: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'UserDetail',
+            },
+        ],
+        attachments: [
+            {
+                type: String,
+            },
+        ],
+        imageURL: String,
+        status: [
+            {
+                type: String,
+            },
+        ],
     },
-    brief: {
-        type: String,
-        required: true,
-    },
-    keyWord: [{
-        type: String,
-        default: []
-    }],
-    type: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Type'
-    }],
-    articleDownloads: {
-        type: Number,
-        default: 0
-    },
-    articleViews: {
-        type: Number,
-        default: 0
-    },
-    receivedDate: {
-        type: Date,
-        default: Date.now()
-    },
-    publishedDate: {
-        type: Date,
-        default: Date.now()
-    },
-    author: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserDetail'
-    }],
-    attachments: [{
-        type: String
-    }],
-    imageURL: String,
-    status: String
-}, {
-    timestamps: true
-})
+    {
+        timestamps: true,
+    }
+)
 
-const Article = mongoose.model('Article', articleSchema);
+const Article = mongoose.model('Article', articleSchema)
 
-
-export { articleSchema, Article };
+export { articleSchema, Article }
