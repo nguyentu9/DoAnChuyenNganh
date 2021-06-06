@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
-import TabPanel from '../components/Common/TabPanel';
+import TabPanel from '../components/TabPanel';
 
 function Regulation() {
     const classes = useStyles();

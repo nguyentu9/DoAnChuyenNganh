@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import * as yup from 'yup';
 import { login } from '../redux/auth';
 
@@ -25,7 +25,7 @@ const validationSchema = {
 
 function SignIn() {
     const classes = useStyles();
-    const history = useHistory();
+    // const history = useHistory();
     const dispatch = useDispatch();
 
     const token = useSelector(state => state.auth.token);
@@ -43,9 +43,6 @@ function SignIn() {
         },
     })
 
-    // if(token !== null){
-    //     return <Redirect to='/tac-gia' />
-    // }
 
     return (
         <Container component="main" maxWidth="xs">

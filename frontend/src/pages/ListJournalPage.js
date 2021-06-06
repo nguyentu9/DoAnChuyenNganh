@@ -5,8 +5,8 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React from 'react';
 import Pagination from '@material-ui/lab/Pagination';
-import SearchForm from '../components/Common/SearchForm';
-import TabPanel from '../components/Common/TabPanel';
+import SearchForm from '../components/SearchForm';
+import TabPanel from '../components/TabPanel';
 
 function ListJournal() {
     const classes = useStyles();

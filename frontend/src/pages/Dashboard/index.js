@@ -1,18 +1,32 @@
-import { Avatar, Menu, MenuItem, AppBar, Badge, Container, Divider, Drawer, Grid, Paper, IconButton, Toolbar, Typography } from '@material-ui/core';
-import { Route, Switch } from "react-router-dom";
+import {
+    Avatar,
+    Menu,
+    MenuItem,
+    AppBar,
+    Badge,
+    Container,
+    Divider,
+    Drawer,
+    Grid,
+    Paper,
+    IconButton,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
+import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import clsx from 'classnames';
 import React, { useState } from 'react';
-import Deposits from './Deposits';
+import CoutingArticle from './CoutingArticle';
 import ListMenu from './ListMenu';
 import Orders from './Orders';
 import SendArticle from './Author/SendArticle';
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
     },
@@ -101,7 +115,7 @@ export default function Dashboard() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const handleMenu = (event) => {
+    const handleMenu = event => {
         setAnchorEl(event.currentTarget);
     };
     const handleDrawerOpen = () => {
@@ -114,33 +128,42 @@ export default function Dashboard() {
 
     return (
         <div className={classes.root}>
-
-            <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+            <AppBar
+                position='absolute'
+                className={clsx(classes.appBar, open && classes.appBarShift)}
+            >
                 <Toolbar className={classes.toolbar}>
                     <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
+                        edge='start'
+                        color='inherit'
+                        aria-label='open drawer'
                         onClick={handleDrawerOpen}
-                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                        className={clsx(
+                            classes.menuButton,
+                            open && classes.menuButtonHidden
+                        )}
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                    <Typography
+                        component='h1'
+                        variant='h6'
+                        color='inherit'
+                        noWrap
+                        className={classes.title}
+                    >
                         Dashboard
-                     </Typography>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
+                    </Typography>
+                    <IconButton color='inherit'>
+                        <Badge badgeContent={4} color='secondary'>
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
-                    <IconButton
-                        onClick={handleMenu}
-                    >
+                    <IconButton onClick={handleMenu}>
                         <Avatar>T</Avatar>
                     </IconButton>
                     <Menu
-                        id="menu-appbar"
+                        id='menu-appbar'
                         anchorEl={anchorEl}
                         anchorOrigin={{
                             vertical: 'top',
@@ -154,18 +177,21 @@ export default function Dashboard() {
                         open={openMenu}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>Thông tin cá nhân</MenuItem>
+                        <MenuItem onClick={handleClose}>
+                            Thông tin cá nhân
+                        </MenuItem>
                         <MenuItem onClick={handleClose}>Đăng xuất</MenuItem>
                     </Menu>
                 </Toolbar>
             </AppBar>
 
-
-
             <Drawer
-                variant="permanent"
+                variant='permanent'
                 classes={{
-                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                    paper: clsx(
+                        classes.drawerPaper,
+                        !open && classes.drawerPaperClose
+                    ),
                 }}
                 open={open}
             >
@@ -180,19 +206,17 @@ export default function Dashboard() {
 
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
-
-
+                <Container maxWidth='lg' className={classes.container}>
                     <Switch>
-                        <Route exact path="/tac-gia/gui-bai-bao">
+                        <Route exact path='/tac-gia/gui-bai-bao'>
                             <SendArticle />
                         </Route>
 
-                        <Route exact path="/tac-gia/tat-ca-bai-bao">
+                        <Route exact path='/tac-gia/tat-ca-bai-bao'>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={4} lg={3}>
                                     <Paper className={fixedHeightPaper}>
-                                        <Deposits />
+                                        <CoutingArticle />
                                     </Paper>
                                 </Grid>
                                 <Grid item xs={12} md={8} lg={9}>
@@ -209,28 +233,23 @@ export default function Dashboard() {
                             </Grid>
                         </Route>
 
-                        <Route exact path="/tac-gia/bai-bao-da-gui">
+                        <Route exact path='/tac-gia/bai-bao-da-gui'></Route>
 
-                        </Route>
+                        <Route exact path='/tac-gia/xem-phan-bien'></Route>
 
-                        <Route exact path="/tac-gia/xem-phan-bien">
+                        <Route
+                            exact
+                            path='/phan-bien/phan-bien-bai-bao'
+                        ></Route>
 
-                        </Route>
-
-
-
-
-                        <Route exact path="/phan-bien/phan-bien-bai-bao">
-
-                        </Route>
-
-                        <Route exact path="/phan-bien/chap-nhan-chinh-sua">
-
-                        </Route>
-                        <Route exact path="/phan-bien/bai-bao-da-phan-bien">
-
-                        </Route>
-
+                        <Route
+                            exact
+                            path='/phan-bien/chap-nhan-chinh-sua'
+                        ></Route>
+                        <Route
+                            exact
+                            path='/phan-bien/bai-bao-da-phan-bien'
+                        ></Route>
                     </Switch>
                 </Container>
             </main>

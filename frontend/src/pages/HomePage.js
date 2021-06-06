@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Grid } from '@material-ui/core';
 import Article from '../components/Article';
-import SearchForm from '../components/Common/SearchForm';
+import SearchForm from '../components/SearchForm';
 
 function Home() {
     return (

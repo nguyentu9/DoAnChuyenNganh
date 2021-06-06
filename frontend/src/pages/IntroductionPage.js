@@ -3,7 +3,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React, {useState} from 'react';
-import TabPanel from '../components/Common/TabPanel';
+import TabPanel from '../components/TabPanel';
 
 function a11yProps(index) {
     return {

@@ -1,12 +1,36 @@
-import { Collapse, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import StarBorder from '@material-ui/icons/StarBorder';
+import { Collapse, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons';
+import SendIcon from '@material-ui/icons/Send';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import PersonIcon from '@material-ui/icons/Person';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import FeedbackOutlinedIcon from '@material-ui/icons/FeedbackOutlined';
+import RestorePageOutlinedIcon from '@material-ui/icons/RestorePageOutlined';
+import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
+// import PreviewIcon from '@material-ui/icons/Preview';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles(theme => ({
+    link: {
+        display: 'flex',
+        alignItems: 'center',
+        textDecoration: 'none',
+        fontWeight: 'bold',
+        color: '#000',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#EEE'
+        },
+    },
+    active: {
+
+    }
+}))
 function ListMenu() {
+    const classes = useStyles();
     const [authorOpen, setauthorOpen] = React.useState(true);
     const [appraiserOpen, setappraiserOpen] = React.useState(false);
 
@@ -21,44 +45,45 @@ function ListMenu() {
         <List>
             <ListItem button onClick={handleAuthorClick}>
                 <ListItemIcon>
-                    <InboxIcon />
+                    <PersonIcon />
                 </ListItemIcon>
-                <ListItemText primary="Tác giả" />
+                <ListItemText
+                    disableTypography
+                    primary={<Typography type="body2" style={{ color: '#000', fontWeight: '500' }}>Tác giả</Typography>}
+                />
                 {authorOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={authorOpen} timeout="auto" unmountOnExit>
+            <Collapse in={authorOpen} timeout="auto" icon={PersonIcon}>
                 <List component="div" disablePadding>
                     <NavLink
                         exact
-                        // className={classes.link}
+                        className={classes.link}
                         to='/tac-gia/gui-bai-bao'
                         underline="none"
-
-                        activeStyle={{ color: "#3f51b5" }}
+                        activeStyle={{ color: "#3f51b5", backgroundColor: "#EEE" }}
                     >
                         <ListItem
                             button
                             style={{ paddingLeft: '1.2rem' }}
-                        // selected={true}
                         >
                             <ListItemIcon>
-                                <StarBorder />
+                                <SendIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Gửi bài báo" />
+                            <ListItemText primary="Gửi bài báo" />
                         </ListItem>
                     </NavLink>
 
 
                     <NavLink
                         exact
-                        // className={classes.link}
+                        className={classes.link}
                         to='/tac-gia/tat-ca-bai-bao'
                         underline="none"
-                        activeStyle={{ color: "#3f51b5" }}
+                        activeStyle={{ color: "#3f51b5", backgroundColor: "#EEE" }}
                     >
                         <ListItem button style={{ paddingLeft: '1.2rem' }}>
                             <ListItemIcon>
-                                <StarBorder />
+                                <ListAltIcon />
                             </ListItemIcon>
                             <ListItemText primary="Tất cả bài báo" />
                         </ListItem>
@@ -66,31 +91,31 @@ function ListMenu() {
 
                     <NavLink
                         exact
-                        // className={classes.link}
+                        className={classes.link}
                         to='/tac-gia/bai-bao-da-gui'
                         underline="none"
-                        activeStyle={{ color: "#3f51b5" }}
+                        activeStyle={{ color: "#3f51b5", backgroundColor: "#EEE" }}
                     >
                         <ListItem button style={{ paddingLeft: '1.2rem' }}>
                             <ListItemIcon>
-                                <StarBorder />
+                                <PlaylistAddCheckIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Bài báo đã gửi" />
+                            <ListItemText primary="Bài báo đã gửi" />
                         </ListItem>
                     </NavLink>
 
                     <NavLink
                         exact
-                        // className={classes.link}
+                        className={classes.link}
                         to='/tac-gia/xem-phan-bien'
                         underline="none"
-                        activeStyle={{ color: "#3f51b5" }}
+                        activeStyle={{ color: "#3f51b5", backgroundColor: "#EEE" }}
                     >
                         <ListItem button style={{ paddingLeft: '1.2rem' }}>
                             <ListItemIcon>
                                 <StarBorder />
                             </ListItemIcon>
-                            <ListItemText primary="Xem phản biện" />
+                            <ListItemText primary="Xem phản biện" />
                         </ListItem>
                     </NavLink>
                 </List>
@@ -98,9 +123,12 @@ function ListMenu() {
 
             <ListItem button onClick={handleAppraiseClick}>
                 <ListItemIcon>
-                    <InboxIcon />
+                    <SupervisorAccountIcon />
                 </ListItemIcon>
-                <ListItemText primary="Phản biện" />
+                <ListItemText 
+                    disableTypography
+                    primary={<Typography type="body2" style={{ color: '#000', fontWeight: '500' }}>Phản biện</Typography>}
+                 />
                 {appraiserOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={appraiserOpen} timeout="auto" unmountOnExit>
@@ -108,47 +136,47 @@ function ListMenu() {
 
                     <NavLink
                         exact
-                        // className={classes.link}
+                        className={classes.link}
                         to='/phan-bien/phan-bien-bai-bao'
                         underline="none"
-                        activeStyle={{ color: "#3f51b5" }}
+                        activeStyle={{ color: "#3f51b5", backgroundColor: "#EEE" }}
                     >
                         <ListItem button style={{ paddingLeft: '1.2rem' }}>
                             <ListItemIcon>
-                                <StarBorder />
+                                <FeedbackOutlinedIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Phản biện bài báo" />
+                            <ListItemText primary="Phản biện bài báo" />
                         </ListItem>
                     </NavLink>
 
 
                     <NavLink
                         exact
-                        // className={classes.link}
+                        className={classes.link}
                         to='/phan-bien/chap-nhan-chinh-sua'
                         underline="none"
-                        activeStyle={{ color: "#3f51b5" }}
+                        activeStyle={{ color: "#3f51b5", backgroundColor: "#EEE" }}
                     >
                         <ListItem button style={{ paddingLeft: '1.2rem' }}>
                             <ListItemIcon>
-                                <StarBorder />
+                                <RestorePageOutlinedIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Chấp nhận chỉnh sửa" />
+                            <ListItemText primary="Chấp nhận chỉnh sửa" />
                         </ListItem>
                     </NavLink>
 
                     <NavLink
                         exact
-                        // className={classes.link}
+                        className={classes.link}
                         to='/phan-bien/bai-bao-da-phan-bien'
                         underline="none"
-                        activeStyle={{ color: "#3f51b5" }}
+                        activeStyle={{ color: "#3f51b5", backgroundColor: "#EEE" }}
                     >
                         <ListItem button style={{ paddingLeft: '1.2rem' }}>
                             <ListItemIcon>
-                                <StarBorder />
+                                <AssignmentTurnedInOutlinedIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Bài báo đã phản biện" />
+                            <ListItemText primary="Bài báo đã phản biện" />
                         </ListItem>
                     </NavLink>
                 </List>
