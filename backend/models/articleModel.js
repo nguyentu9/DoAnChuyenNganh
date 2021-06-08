@@ -4,24 +4,15 @@ const articleSchema = mongoose.Schema(
     {
         title: {
             type: String,
-            required: true,
             unique: true,
         },
-        brief: {
-            type: String,
-            required: true,
-        },
-        keyWord: [
-            {
-                type: String,
-                default: [],
-            },
-        ],
+        brief: String,
+        keyWord: [String],
         type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Type',
-            },
+            // {
+            //     type: mongoose.Schema.Types.ObjectId,
+            //     ref: 'Type',
+            // },
         ],
         articleDownloads: {
             type: Number,
@@ -40,22 +31,14 @@ const articleSchema = mongoose.Schema(
             default: Date.now(),
         },
         author: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'UserDetail',
-            },
+            // {
+            //     type: mongoose.Schema.Types.ObjectId,
+            //     ref: 'UserDetail',
+            // },
         ],
-        attachments: [
-            {
-                type: String,
-            },
-        ],
+        attachments: [],
         imageURL: String,
-        status: [
-            {
-                type: String,
-            },
-        ],
+        status: [String],
     },
     {
         timestamps: true,

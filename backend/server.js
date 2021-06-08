@@ -54,7 +54,7 @@ app.post(
     uploadArticleSchema,
     async (req, res) => {
         try {
-            const { title, brief, keyWord, type, author } = req.body
+            const { title, brief, keyWord, type, author, fileNames } = req.body
 
             const errors = validationResult(req)
             // console.log(errors)
@@ -65,12 +65,21 @@ app.post(
                 return newK === '' ? arr : [...arr, newK]
             }, [])
 
+            let attachments = []
+            let fnames = JSON.parse(fileNames);
+            for (let i = 0; i < fnames.length; i++) {
+                attachments.push({
+                    fileName: fnames[i],
+                    filePath: path.join('upload', req.files[i].filename),
+                })
+            }
             const article = await Article({
                 title,
                 brief,
                 keyWord: key,
-                type,
-                author,
+                type: JSON.parse(type),
+                author: JSON.parse(author),
+                attachments,
             })
             article.save()
             res.json({
