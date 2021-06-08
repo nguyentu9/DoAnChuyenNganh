@@ -8,7 +8,6 @@ import {
     Divider,
     Drawer,
     Grid,
-    Paper,
     IconButton,
     Toolbar,
     Typography,
@@ -20,10 +19,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import clsx from 'classnames';
 import React, { useState } from 'react';
-import CoutingArticle from './CoutingArticle';
 import ListMenu from './ListMenu';
 import Orders from './Orders';
 import SendArticle from './Author/SendArticle';
+import ListSendedArticle from './Author/ListSendedArticle';
+// import CoutingArticle from './CoutingArticle';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -124,7 +124,7 @@ export default function Dashboard() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
         <div className={classes.root}>
@@ -214,42 +214,28 @@ export default function Dashboard() {
 
                         <Route exact path='/tac-gia/tat-ca-bai-bao'>
                             <Grid container spacing={3}>
-                                <Grid item xs={12} md={4} lg={3}>
+                                {/* <Grid item xs={12}>
                                     <Paper className={fixedHeightPaper}>
                                         <CoutingArticle />
                                     </Paper>
-                                </Grid>
-                                <Grid item xs={12} md={8} lg={9}>
-                                    <Paper className={fixedHeightPaper}>
-                                        {/* <Chart /> */}
-                                    </Paper>
-                                </Grid>
-                                {/* Recent Orders */}
+                                </Grid> */}
+
                                 <Grid item xs={12}>
-                                    <Paper className={classes.paper}>
-                                        <Orders />
-                                    </Paper>
+                                    <Orders />
                                 </Grid>
                             </Grid>
                         </Route>
 
-                        <Route exact path='/tac-gia/bai-bao-da-gui'></Route>
+                        <Route exact path='/tac-gia/bai-bao-da-gui'>
+                            <ListSendedArticle />
+                        </Route>
 
-                        <Route exact path='/tac-gia/xem-phan-bien'></Route>
+                        <Route exact path='/tac-gia/xem-phan-bien' />
 
-                        <Route
-                            exact
-                            path='/phan-bien/phan-bien-bai-bao'
-                        ></Route>
+                        <Route exact path='/phan-bien/phan-bien-bai-bao' />
 
-                        <Route
-                            exact
-                            path='/phan-bien/chap-nhan-chinh-sua'
-                        ></Route>
-                        <Route
-                            exact
-                            path='/phan-bien/bai-bao-da-phan-bien'
-                        ></Route>
+                        <Route exact path='/phan-bien/chap-nhan-chinh-sua' />
+                        <Route exact path='/phan-bien/bai-bao-da-phan-bien' />
                     </Switch>
                 </Container>
             </main>

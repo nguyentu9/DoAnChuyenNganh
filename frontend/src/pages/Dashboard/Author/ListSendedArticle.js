@@ -1,20 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Chip,
-    TablePagination,
-} from '@material-ui/core';
-import DoneIcon from '@material-ui/icons/Done';
-import WarningIcon from '@material-ui/icons/Warning';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
-import data from '../../data';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
+import data from '../../../data';
+import { TablePagination } from '@material-ui/core';
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
@@ -26,7 +21,7 @@ function ListSendedArticle() {
 
     return (
         <>
-            <TableContainer component={Paper}>
+            {/* <TableContainer component={Paper}>
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
@@ -57,55 +52,10 @@ function ListSendedArticle() {
                                 </TableCell>
                                 <TableCell align='center' width='10%'>
                                     {row.type.map(item => (
-                                        <Chip
-                                            label={item.name}
-                                            style={{ margin: '3px' }}
-                                        />
+                                        <Chip label={item.name} />
                                     ))}
                                 </TableCell>
                                 <TableCell align='right' width='10%'>
-                                    <Chip
-                                        variant='outlined'
-                                        style={{
-                                            border: '#ea9e10 1px solid',
-                                            color: '#ea9e10',
-                                        }}
-                                        size='small'
-                                        label='Đợi duyệt'
-                                        icon={
-                                            <AutorenewIcon
-                                                style={{ color: '#ea9e10' }}
-                                            />
-                                        }
-                                    />
-                                    <Chip
-                                        variant='outlined'
-                                        style={{
-                                            border: '#f44336 1px solid',
-                                            color: '#f44336',
-                                        }}
-                                        size='small'
-                                        label='Từ chối'
-                                        icon={
-                                            <WarningIcon
-                                                style={{ color: '#f44336' }}
-                                            />
-                                        }
-                                    />
-                                    <Chip
-                                        variant='outlined'
-                                        style={{
-                                            border: '#61af61 1px solid',
-                                            color: '#61af61',
-                                        }}
-                                        size='small'
-                                        label='Chấp nhận đăng'
-                                        icon={
-                                            <DoneIcon
-                                                style={{ color: '#61af61' }}
-                                            />
-                                        }
-                                    />
                                     {row.status.map(item => item.name + ',')}
                                 </TableCell>
                                 <TableCell align='right'>
@@ -128,7 +78,7 @@ function ListSendedArticle() {
                 // page={2}
                 // onChangePage={handleChangePage}
                 // onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
+            /> */}
         </>
     );
 }
