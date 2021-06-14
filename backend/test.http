@@ -21,7 +21,10 @@ GET {{hostname}}/api/v1/users
 GET {{hostname}}/api/v1/users/60912533c6e93605886ab60f
 
 ###
+// Get all authors
+GET {{hostname}}/api/v1/authors
 
+###
 POST {{hostname}}/api/v1/users
 Content-Type: application/json
 

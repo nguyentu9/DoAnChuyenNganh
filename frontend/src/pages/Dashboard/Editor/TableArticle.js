@@ -14,16 +14,16 @@ import {
 import DoneIcon from '@material-ui/icons/Done';
 import WarningIcon from '@material-ui/icons/Warning';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
-import data from '../../data';
+import data from '../../../data';
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
 });
 
-function ListSendedArticle() {
+function TableArticle() {
     const classes = useStyles();
-
+    let n = 1;
     return (
         <>
             <TableContainer component={Paper}>
@@ -31,12 +31,15 @@ function ListSendedArticle() {
                     <TableHead>
                         <TableRow>
                             <TableCell align='left'>STT</TableCell>
+                            {/* <TableCell align='left'>Mã</TableCell> */}
                             <TableCell align='center' width='30%'>
                                 Tên bài báo
                             </TableCell>
                             <TableCell align='center' width='10%'>
                                 Loại
                             </TableCell>
+                            <TableCell align='right'>Tác giả</TableCell>
+                            <TableCell align='right'>Phản biện</TableCell>
                             <TableCell align='right'>Trạng thái</TableCell>
                             <TableCell align='right'>Ngày gửi</TableCell>
                             <TableCell align='right'>Ngày cập nhật</TableCell>
@@ -45,9 +48,10 @@ function ListSendedArticle() {
                     <TableBody>
                         {data.map(row => (
                             <TableRow key={row._id}>
-                                <TableCell align='left'>
+                                <TableCell align='left'>{n++}</TableCell>
+                                {/* <TableCell align='left'>
                                     {row._id.substring(row._id.length - 5)}
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell
                                     component='th'
                                     scope='row'
@@ -62,6 +66,12 @@ function ListSendedArticle() {
                                             style={{ margin: '3px' }}
                                         />
                                     ))}
+                                </TableCell>
+                                <TableCell align='right'>
+                                    {row.receivedDate}
+                                </TableCell>
+                                <TableCell align='right'>
+                                    {row.receivedDate}
                                 </TableCell>
                                 <TableCell align='right' width='10%'>
                                     <Chip
@@ -133,4 +143,4 @@ function ListSendedArticle() {
     );
 }
 
-export default ListSendedArticle;
+export default TableArticle;

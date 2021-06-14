@@ -19,6 +19,7 @@ import userRoute from './router/user.router.js'
 import majorRoute from './router/major.router.js'
 import degreeRoute from './router/degree.router.js'
 import { validationResult } from 'express-validator'
+import { User } from './models/userModel.js'
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -34,6 +35,14 @@ app.use('/api/v1/users', userRoute)
 app.use('/api/v1/majors', majorRoute)
 app.use('/api/v1/degrees', degreeRoute)
 
+app.get('/api/v1/authors', async (req, res) => {
+    try {
+        const author = await User.find({ isAdmin: false })
+        res.json(author)
+    } catch (e) {
+        console.error(e)
+    }
+})
 app.get('/api/v1/hotArticles', (req, res) => {})
 
 app.get('/api/v1/newsestArticles', (req, res) => {})
@@ -46,6 +55,8 @@ app.get('/api/v1/articleTypes', async (req, res) => {
         console.error(err)
     }
 })
+
+app.get('/api/v1/articles', (req, res) => {})
 
 // need to put middleware check isUser before add a new article
 app.post(
@@ -66,7 +77,7 @@ app.post(
             }, [])
 
             let attachments = []
-            let fnames = JSON.parse(fileNames);
+            let fnames = JSON.parse(fileNames)
             for (let i = 0; i < fnames.length; i++) {
                 attachments.push({
                     fileName: fnames[i],

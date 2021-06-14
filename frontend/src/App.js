@@ -18,9 +18,10 @@ function App() {
     return (
         <>
             <Switch>
-                {/* If url match tac-gia,.. then hidden Header component  */}
+                {/* If url match then hidden Header component  */}
                 <Route path='/tac-gia' />
                 <Route path='/phan-bien' />
+                <Route path='/bien-tap' />
                 <Route path='/thong-tin-ca-nhan' />
                 <Route path='*' component={Header} />
             </Switch>
@@ -44,8 +45,9 @@ function App() {
                     />
                     <Route path='/tac-gia' component={Dashboard} />
                     <Route path='/phan-bien' component={Dashboard} />
+                    <Route path='/bien-tap' component={Dashboard} />
 
-                    <Route path='*' component={<div>404</div>} />
+                    <Route path='*' component={() => <div>404</div>} />
                 </Switch>
             </div>
             <Footer />

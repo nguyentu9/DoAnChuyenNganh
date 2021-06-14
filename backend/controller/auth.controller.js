@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-
 import { User } from '../models/userModel.js'
 export const signin = async (req, res) => {
     const { userName, passWord } = req.body
@@ -43,7 +42,6 @@ export const signin = async (req, res) => {
 }
 
 export const signup = async (req, res) => {
-    console.log(req.body)
     const {
         userName,
         passWord,
@@ -58,16 +56,19 @@ export const signup = async (req, res) => {
 
     // if (!userName.trim() || !passWord.trim() || !fullName.trim() || !phone.trim()
     //     || !emailAddr.trim() || !major.trim() || !degree.trim() || !office.trim() || !address.trim()) return;
-
     const user = await User.findOne({ userName })
-    console.log(user)
     if (user) {
-        res.json({ message: 'Tên đăng nhập đã tồn tại' })
+        res.status(409).json({
+            status: 409,
+            message: 'Tên đăng nhập đã tồn tại',
+        })
     }
-    res.json({
-        status: 200,
-        message: 'Đăng ký thành công',
-    })
+
+    const newUser = new User({ userName, passWord })
+    const { _id } = await newUser.save()
+    const userDetail = new UserDetail()
+
+    res.status(201).json({ status: 201, message: 'Đăng ký thành công' })
 
     // try {
     //     // await User.create({ userName, passWord })

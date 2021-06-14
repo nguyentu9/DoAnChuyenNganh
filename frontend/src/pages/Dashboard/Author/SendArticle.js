@@ -13,7 +13,7 @@ import {
     ListItemText,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -24,7 +24,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import CircularProgress from '../../../components/CircularProgress/CircularProgress';
-
+import useDebounced from '../../../hooks/useDebounced';
 const validationSchema = {
     title: yup.string().trim().required('Tiêu đề không được rỗng'),
     brief: yup.string().trim().required('Tóm tắt không được rỗng'),
@@ -36,6 +36,7 @@ const validationSchema = {
 
 function SendArticle() {
     const [articleTypes, setArticleTypes] = useState([]);
+    const [listAuthors, setListAuthors] = useState([]);
     const [progress, setProgress] = useState(0);
     const classes = useStyles();
 
@@ -76,7 +77,6 @@ function SendArticle() {
                     setProgress(percentCompleted);
                     if (percentCompleted === 100) {
                         resetForm(formik.initialValues);
-                        notify();
                         setProgress(0);
                     }
                 },
@@ -84,11 +84,22 @@ function SendArticle() {
             axios
                 .post('http://localhost:3001/api/v1/article', data, config)
                 .then(res => {
+                    notify();
                     console.log(JSON.stringify(res.data));
                 })
                 .catch(e => alert(`Send Article Error - ${e}`));
         },
     });
+
+    const {
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        setFieldValue,
+        touched,
+        errors,
+        values,
+    } = formik;
 
     useEffect(() => {
         async function fetchArticleTypes() {
@@ -105,16 +116,31 @@ function SendArticle() {
         fetchArticleTypes();
     }, []);
 
+    useEffect(() => {
+        async function fetchAuthor() {
+            try {
+                const res = await axios.get(
+                    `${process.env.REACT_APP_API_URL}/api/v1/author`
+                );
+                const { data } = res;
+                setListAuthors(data);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        fetchAuthor();
+    }, []);
+
     function removeItem(files, index) {
         return files.length > 1 ? [...files].filter((_, i) => i !== index) : [];
     }
     function handleDelete(index) {
-        let { files, fileNames } = formik.values;
+        let { files, fileNames } = values;
         let newFiles = removeItem(files, index);
         let newFileNames = removeItem(fileNames, index);
 
-        formik.setFieldValue('files', [...newFiles]);
-        formik.setFieldValue('fileNames', [...newFileNames]);
+        setFieldValue('files', [...newFiles]);
+        setFieldValue('fileNames', [...newFileNames]);
     }
 
     function notify() {
@@ -131,24 +157,24 @@ function SendArticle() {
     return (
         <>
             <Grid container spacing={3}>
+                <ToastContainer
+                    position='top-right'
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss={false}
+                    draggable
+                    pauseOnHover={false}
+                />
                 <Grid item xs={12} sm={12}>
-                    <ToastContainer
-                        position='top-right'
-                        autoClose={3000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss={false}
-                        draggable
-                        pauseOnHover={false}
-                    />
                     <Typography component='h1' variant='h5' align='center'>
                         GỬI BÀI BÁO
                     </Typography>
                 </Grid>
 
-                <form className={classes.form} onSubmit={formik.handleSubmit}>
+                <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField
                         required
                         style={{ marginBottom: '.7rem' }}
@@ -158,12 +184,10 @@ function SendArticle() {
                         variant='outlined'
                         fullWidth
                         multiline
-                        value={formik.values.title}
-                        onChange={formik.handleChange}
-                        error={
-                            formik.touched.title && Boolean(formik.errors.title)
-                        }
-                        helperText={formik.touched.title && formik.errors.title}
+                        value={values.title}
+                        onChange={handleChange}
+                        error={touched.title && Boolean(errors.title)}
+                        helperText={touched.title && errors.title}
                     />
 
                     <TextField
@@ -175,12 +199,10 @@ function SendArticle() {
                         variant='outlined'
                         multiline
                         fullWidth
-                        value={formik.values.brief}
-                        onChange={formik.handleChange}
-                        error={
-                            formik.touched.brief && Boolean(formik.errors.brief)
-                        }
-                        helperText={formik.touched.brief && formik.errors.brief}
+                        value={values.brief}
+                        onChange={handleChange}
+                        error={touched.brief && Boolean(errors.brief)}
+                        helperText={touched.brief && errors.brief}
                     />
 
                     <Tooltip
@@ -196,15 +218,10 @@ function SendArticle() {
                             label='Từ Khoá'
                             variant='outlined'
                             fullWidth
-                            value={formik.values.keyWord}
-                            onChange={formik.handleChange}
-                            error={
-                                formik.touched.keyWord &&
-                                Boolean(formik.errors.keyWord)
-                            }
-                            helperText={
-                                formik.touched.keyWord && formik.errors.keyWord
-                            }
+                            value={values.keyWord}
+                            onChange={handleChange}
+                            error={touched.keyWord && Boolean(errors.keyWord)}
+                            helperText={touched.keyWord && errors.keyWord}
                         />
                     </Tooltip>
 
@@ -216,10 +233,8 @@ function SendArticle() {
                         limitTags={3}
                         options={articleTypes}
                         getOptionLabel={type => type.name}
-                        onOpen={formik.handleBlur}
-                        onChange={(_, value) =>
-                            formik.setFieldValue('type', value)
-                        }
+                        onOpen={handleBlur}
+                        onChange={(_, value) => setFieldValue('type', value)}
                         filterSelectedOptions
                         renderInput={params => (
                             <TextField
@@ -228,13 +243,8 @@ function SendArticle() {
                                 label='Thể Loại'
                                 placeholder='Thể Loại'
                                 name='type'
-                                error={
-                                    formik.touched.type &&
-                                    Boolean(formik.errors.type)
-                                }
-                                helperText={
-                                    formik.touched.type && formik.errors.type
-                                }
+                                error={touched.type && Boolean(errors.type)}
+                                helperText={touched.type && errors.type}
                             />
                         )}
                     />
@@ -249,9 +259,7 @@ function SendArticle() {
                         getOptionLabel={({ _id, fullName }) =>
                             _id + ' _ ' + fullName
                         }
-                        onChange={(_, value) =>
-                            formik.setFieldValue('author', value)
-                        }
+                        onChange={(_, value) => setFieldValue('author', value)}
                         filterSelectedOptions
                         renderInput={params => (
                             <TextField
@@ -260,14 +268,8 @@ function SendArticle() {
                                 label='Danh Sách Tác Giả'
                                 placeholder='Tác giả'
                                 name='author'
-                                error={
-                                    formik.touched.author &&
-                                    Boolean(formik.errors.author)
-                                }
-                                helperText={
-                                    formik.touched.author &&
-                                    formik.errors.author
-                                }
+                                error={touched.author && Boolean(errors.author)}
+                                helperText={touched.author && errors.author}
                             />
                         )}
                     />
@@ -275,7 +277,7 @@ function SendArticle() {
                         <Typography variant='h6'>Danh sách file:</Typography>
 
                         <List dense={true}>
-                            {formik.values.files.map((file, index) => (
+                            {values.files.map((file, index) => (
                                 <ListItem key={index}>
                                     <ListItemAvatar>
                                         <Avatar>
@@ -283,7 +285,7 @@ function SendArticle() {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText
-                                        primary={formik.values.fileNames[index]}
+                                        primary={values.fileNames[index]}
                                         secondary={file.name}
                                     />
                                     <ListItemSecondaryAction>
@@ -309,10 +311,7 @@ function SendArticle() {
                             getOptionLabel={filename => filename.title}
                             onChange={(_, value) => {
                                 if (value)
-                                    formik.setFieldValue(
-                                        'fileName',
-                                        value.title
-                                    );
+                                    setFieldValue('fileName', value.title);
                             }}
                             filterSelectedOptions
                             renderInput={params => (
@@ -322,19 +321,18 @@ function SendArticle() {
                                     label='Danh Sách File'
                                     name='fileName'
                                     error={
-                                        formik.touched.fileNames &&
-                                        Boolean(formik.errors.fileNames)
+                                        touched.fileNames &&
+                                        Boolean(errors.fileNames)
                                     }
                                     helperText={
-                                        formik.touched.fileNames &&
-                                        formik.errors.fileNames
+                                        touched.fileNames && errors.fileNames
                                     }
                                 />
                             )}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} md={6}>
-                        {formik.values.fileName && (
+                        {values.fileName && (
                             <label htmlFor='files'>
                                 {(progress === 0 || progress === 100
                                     ? false
@@ -349,14 +347,14 @@ function SendArticle() {
                                     style={{ display: 'none' }}
                                     accept='application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                                     onChange={event => {
-                                        if(!event.target.files[0]) return;
+                                        if (!event.target.files[0]) return;
                                         let { files, fileName, fileNames } =
-                                            formik.values;
-                                        formik.setFieldValue('files', [
+                                            values;
+                                        setFieldValue('files', [
                                             ...files,
                                             event.target.files[0],
                                         ]);
-                                        formik.setFieldValue('fileNames', [
+                                        setFieldValue('fileNames', [
                                             ...fileNames,
                                             fileName,
                                         ]);
@@ -403,25 +401,25 @@ const listFileNames = [
     { id: 4, title: 'Thư phản hồi Phản Biện' },
 ];
 
-const listAuthors = [
-    { fullName: 'The Shawshank Redemption', _id: 1994 },
-    { fullName: 'The Godfather', _id: 1972 },
-    { fullName: 'The Godfather: Part II', _id: 1974 },
-    { fullName: 'The Dark Knight', _id: 2008 },
-    { fullName: '12 Angry Men', _id: 1957 },
-    { fullName: "Schindler's List", _id: 1993 },
-    { fullName: 'Pulp Fiction', _id: 1994 },
-    { fullName: 'The Lord of the Rings: The Return of the King', _id: 2003 },
-    { fullName: 'The Good, the Bad and the Ugly', _id: 1966 },
-    { fullName: 'Fight Club', _id: 1999 },
-    {
-        fullName: 'The Lord of the Rings: The Fellowship of the Ring',
-        _id: 2001,
-    },
-    { fullName: 'Star Wars: Episode V - The Empire Strikes Back', _id: 1980 },
-    { fullName: 'Forrest Gump', _id: 1994 },
-    { fullName: 'Inception', _id: 2010 },
-    { fullName: 'The Lord of the Rings: The Two Towers', _id: 2002 },
-    { fullName: "One Flew Over the Cuckoo's Nest", _id: 1975 },
-    { fullName: 'Goodfellas', _id: 1990 },
-];
+// const listAuthors = [
+//     { fullName: 'The Shawshank Redemption', _id: 1994 },
+//     { fullName: 'The Godfather', _id: 1972 },
+//     { fullName: 'The Godfather: Part II', _id: 1974 },
+//     { fullName: 'The Dark Knight', _id: 2008 },
+//     { fullName: '12 Angry Men', _id: 1957 },
+//     { fullName: "Schindler's List", _id: 1993 },
+//     { fullName: 'Pulp Fiction', _id: 1994 },
+//     { fullName: 'The Lord of the Rings: The Return of the King', _id: 2003 },
+//     { fullName: 'The Good, the Bad and the Ugly', _id: 1966 },
+//     { fullName: 'Fight Club', _id: 1999 },
+//     {
+//         fullName: 'The Lord of the Rings: The Fellowship of the Ring',
+//         _id: 2001,
+//     },
+//     { fullName: 'Star Wars: Episode V - The Empire Strikes Back', _id: 1980 },
+//     { fullName: 'Forrest Gump', _id: 1994 },
+//     { fullName: 'Inception', _id: 2010 },
+//     { fullName: 'The Lord of the Rings: The Two Towers', _id: 2002 },
+//     { fullName: "One Flew Over the Cuckoo's Nest", _id: 1975 },
+//     { fullName: 'Goodfellas', _id: 1990 },
+// ];

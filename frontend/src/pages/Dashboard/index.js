@@ -20,9 +20,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import clsx from 'classnames';
 import React, { useState } from 'react';
 import ListMenu from './ListMenu';
-import Orders from './Orders';
+import Orders from './TableArticle';
 import SendArticle from './Author/SendArticle';
 import ListSendedArticle from './Author/ListSendedArticle';
+import ManageArticle from './Editor/ManageArticle';
 // import CoutingArticle from './CoutingArticle';
 const drawerWidth = 240;
 
@@ -236,6 +237,15 @@ export default function Dashboard() {
 
                         <Route exact path='/phan-bien/chap-nhan-chinh-sua' />
                         <Route exact path='/phan-bien/bai-bao-da-phan-bien' />
+
+                        <Route
+                            exact
+                            path='/bien-tap/quan-ly-bai-bao'
+                            component={ManageArticle}
+                        />
+                        <Route exact path='/bien-tap/quan-ly-tap-chi' />
+                        <Route exact path='/bien-tap/quan-ly-tai-khoan' />
+                        <Route path='/bien-tap/giao-dien' />
                     </Switch>
                 </Container>
             </main>
