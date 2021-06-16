@@ -1,13 +1,16 @@
 import jwt from 'jsonwebtoken'
 import { User } from '../models/userModel.js'
+import { UserDetail } from '../models/userDetailModel.js'
+import md5 from 'md5'
 export const signin = async (req, res) => {
     const { userName, passWord } = req.body
 
     if (!userName || !passWord) {
-        res.status(401).json({
-            status: 'error',
+        res.json({
+            status: 401,
             message: 'Tài khoản hoặc mật khẩu rỗng',
         })
+        return
     }
 
     const user = await User.findOne(
@@ -16,16 +19,18 @@ export const signin = async (req, res) => {
     )
 
     if (!user) {
-        res.status(401).json({
-            status: 'error',
+        res.json({
+            status: 401,
             message: 'Tài khoản không tồn tại',
         })
+        return
     }
     if (user.passWord != passWord) {
-        res.status(401).json({
-            status: 'error',
+        res.json({
+            status: 401,
             message: 'Tài khoản hoặc mật khẩu sai',
         })
+        return
     }
 
     let { _id: id, isAdmin } = user
@@ -47,32 +52,65 @@ export const signup = async (req, res) => {
         passWord,
         fullName,
         phone,
+        confirmPassword,
         emailAddr,
         major,
         degree,
         organization,
         address,
     } = req.body
+    if (passWord !== confirmPassword) {
+        res.json({
+            status: 409,
+            message: 'Mật khẩu không khớp',
+        })
+        return
+    }
 
-    // if (!userName.trim() || !passWord.trim() || !fullName.trim() || !phone.trim()
-    //     || !emailAddr.trim() || !major.trim() || !degree.trim() || !office.trim() || !address.trim()) return;
-    const user = await User.findOne({ userName })
+    let user = await User.findOne({ userName })
     if (user) {
-        res.status(409).json({
+        res.json({
             status: 409,
             message: 'Tên đăng nhập đã tồn tại',
         })
+        return
     }
 
-    const newUser = new User({ userName, passWord })
-    const { _id } = await newUser.save()
-    const userDetail = new UserDetail()
+    user = await UserDetail.findOne({ email: emailAddr })
+    if (user) {
+        res.json({
+            status: 409,
+            message: 'Email đã tồn tại',
+        })
+        return
+    }
+
+    user = await UserDetail.findOne({ phone })
+    if (user) {
+        res.json({
+            status: 409,
+            message: 'Số điện thoại đã tồn tại',
+        })
+        return
+    }
+    try {
+        const newUser = new User({ userName, passWord: md5(passWord) })
+        const { _id } = await newUser.save()
+        const userDetail = new UserDetail({
+            _id,
+            fullName,
+            address,
+            degree,
+            org: organization,
+            major,
+            email: emailAddr,
+            phone,
+        })
+
+        await userDetail.save()
+    } catch (e) {
+        console.error(e)
+    }
 
     res.status(201).json({ status: 201, message: 'Đăng ký thành công' })
-
-    // try {
-    //     // await User.create({ userName, passWord })
-    // } catch (err) {
-    //     console.error(err);
-    // }
 }

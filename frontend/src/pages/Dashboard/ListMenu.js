@@ -20,7 +20,7 @@ import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import PictureInPictureOutlinedIcon from '@material-ui/icons/PictureInPictureOutlined';
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
@@ -36,7 +36,6 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: '#EEE',
         },
     },
-    active: {},
 }));
 
 const authorNavLinks = [
@@ -106,20 +105,25 @@ const editorNavLinks = [
 
 function ListMenu() {
     const classes = useStyles();
-    const isAdmin = useSelector(state => state.auth.isAdmin);
-    // const isAdmin = true;
+
     const [authorOpen, setauthorOpen] = useState(true);
     const [reviewerOpen, setreviewerOpen] = useState(false);
     const [editorOpen, seteditorOpen] = useState(true);
 
-    const handleClick = (usr) => () => {
-        if(usr === 'author')  setauthorOpen(!authorOpen);
-        if(usr ==='reviewer') setreviewerOpen(!reviewerOpen);
-        if(usr === 'editor')  seteditorOpen(!editorOpen);
-    }
+    const isAdmin = useSelector(state => state.auth.isAdmin);
+    const menu = useSelector(state => state.auth.menu);
+    const token = useSelector(state => state.auth.token);
+
+    const handleClick = usr => () => {
+        if (usr === 'author') setauthorOpen(!authorOpen);
+        if (usr === 'reviewer') setreviewerOpen(!reviewerOpen);
+        if (usr === 'editor') seteditorOpen(!editorOpen);
+    };
     return (
         <List>
-            {isAdmin ? (
+            {(isAdmin == null || token == null) && <Redirect to='/dang-nhap' />}
+
+            {isAdmin && menu === 'admin' ? (
                 <>
                     <ListItem button onClick={handleClick('editor')}>
                         <ListItemIcon>

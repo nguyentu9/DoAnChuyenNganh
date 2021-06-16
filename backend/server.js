@@ -18,12 +18,15 @@ import authRoute from './router/auth.router.js'
 import userRoute from './router/user.router.js'
 import majorRoute from './router/major.router.js'
 import degreeRoute from './router/degree.router.js'
+import authorRoute from './router/author.router.js'
+
 import { validationResult } from 'express-validator'
 import { User } from './models/userModel.js'
+
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 connectDB()
 const PORT = process.env.PORT || 3001
@@ -34,15 +37,8 @@ app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/users', userRoute)
 app.use('/api/v1/majors', majorRoute)
 app.use('/api/v1/degrees', degreeRoute)
+app.use('/api/v1/authors', authorRoute)
 
-app.get('/api/v1/authors', async (req, res) => {
-    try {
-        const author = await User.find({ isAdmin: false })
-        res.json(author)
-    } catch (e) {
-        console.error(e)
-    }
-})
 app.get('/api/v1/hotArticles', (req, res) => {})
 
 app.get('/api/v1/newsestArticles', (req, res) => {})
@@ -70,7 +66,7 @@ app.post(
             const errors = validationResult(req)
             // console.log(errors)
 
-            // Remove empty key word and split into array
+            // Remove empty words and split into array
             let key = keyWord.split(',').reduce((arr, k) => {
                 var newK = k.trim()
                 return newK === '' ? arr : [...arr, newK]

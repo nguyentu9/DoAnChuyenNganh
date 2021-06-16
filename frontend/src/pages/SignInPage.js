@@ -16,7 +16,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import * as yup from 'yup';
 import { login } from '../redux/auth';
-
+import { ToastContainer, toast } from 'react-toastify';
+import md5 from 'md5';
+function notify() {
+    toast.error('Tài khoản hoặc mật khẩu sai', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+    });
+}
 const validationSchema = {
     userName: yup
         .string()
@@ -32,7 +44,6 @@ const validationSchema = {
 
 function SignIn() {
     const classes = useStyles();
-    // const history = useHistory();
     const dispatch = useDispatch();
 
     const token = useSelector(state => state.auth.token);
@@ -45,14 +56,28 @@ function SignIn() {
         validationSchema: yup.object().shape(validationSchema),
         onSubmit: values => {
             const { userName, passWord } = values;
-            dispatch(login({ userName, passWord }));
+            dispatch(login({ userName, passWord: md5(passWord) }));
         },
     });
 
+    const handleClick = () => {
+        if (!token) notify();
+    };
     return (
         <Container component='main' maxWidth='xs'>
             {token && <Redirect to='/tac-gia' />}
 
+            <ToastContainer
+                position='top-right'
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover={false}
+            />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
@@ -107,6 +132,7 @@ function SignIn() {
                         variant='contained'
                         color='primary'
                         className={classes.submit}
+                        onClick={() => handleClick()}
                     >
                         Đăng nhập
                     </Button>

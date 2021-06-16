@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 const validationSchema = {
     userName: yup
         .string()
@@ -68,6 +69,16 @@ function notify(msg = 'Tạo tài khoản thành công ! 🎉', isSuccess = tru
             draggable: true,
             progress: undefined,
         });
+    } else {
+        toast.error(msg, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+        });
     }
 }
 function SignUp() {
@@ -91,35 +102,27 @@ function SignUp() {
         },
         validationSchema: yup.object().shape(validationSchema),
         onSubmit: (values, { resetForm }) => {
-            // const data = new FormData();
-            // for (let [key, value] of Object.entries(values)) {
-            //     data.append(key, value);
-            // }
-            console.log(values);
-            // console.log(JSON.stringify(data));
             axios
                 .post(
                     `${process.env.REACT_APP_API_URL}/api/v1/auth/signup`,
                     values
                 )
                 .then(res => {
-                    if (res.data.status === 200) {
+                    const { status, message } = res.data;
+                    console.log(res);
+                    if (status === 201) {
                         resetForm(formik.initialValues);
-                        notify();
-                        setTimeout(() => history.push('/dang-nhap'), 3000);
+                        notify(message);
+                        setTimeout(() => history.push('/dang-nhap'), 2000);
+                    }
+                    if (status >= 400) {
+                        notify(message, false);
                     }
                 })
-                .catch(e => alert(`Send Article Error: ${e}`));
+                .catch(e => console.error(e.res));
         },
     });
-    const {
-        handleSubmit,
-        handleChange,
-        setFieldValue,
-        touched,
-        errors,
-        values,
-    } = formik;
+    const { handleSubmit, handleChange, touched, errors, values } = formik;
 
     useEffect(() => {
         async function fetchMajorList() {

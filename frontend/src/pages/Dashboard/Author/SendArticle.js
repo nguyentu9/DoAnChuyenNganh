@@ -1,30 +1,29 @@
 import {
+    Avatar,
     Button,
     Grid,
-    TextField,
-    Typography,
-    Tooltip,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
-    Avatar,
     ListItemSecondaryAction,
-    IconButton,
     ListItemText,
+    TextField,
+    Tooltip,
+    Typography,
 } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FolderIcon from '@material-ui/icons/Folder';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import * as yup from 'yup';
 import CircularProgress from '../../../components/CircularProgress/CircularProgress';
-import useDebounced from '../../../hooks/useDebounced';
 const validationSchema = {
     title: yup.string().trim().required('Tiêu đề không được rỗng'),
     brief: yup.string().trim().required('Tóm tắt không được rỗng'),
@@ -120,10 +119,11 @@ function SendArticle() {
         async function fetchAuthor() {
             try {
                 const res = await axios.get(
-                    `${process.env.REACT_APP_API_URL}/api/v1/author`
+                    `${process.env.REACT_APP_API_URL}/api/v1/authors`
                 );
                 const { data } = res;
                 setListAuthors(data);
+                console.log(data);
             } catch (e) {
                 console.error(e);
             }
@@ -256,8 +256,8 @@ function SendArticle() {
                         id='author'
                         limitTags={3}
                         options={listAuthors}
-                        getOptionLabel={({ _id, fullName }) =>
-                            _id + ' _ ' + fullName
+                        getOptionLabel={({ fullName, email, org }) =>
+                            `${fullName} - ${email} - ${org}`
                         }
                         onChange={(_, value) => setFieldValue('author', value)}
                         filterSelectedOptions
@@ -275,7 +275,6 @@ function SendArticle() {
                     />
                     <Grid item xs={12} sm={12} md={6}>
                         <Typography variant='h6'>Danh sách file:</Typography>
-
                         <List dense={true}>
                             {values.files.map((file, index) => (
                                 <ListItem key={index}>
@@ -400,26 +399,3 @@ const listFileNames = [
     { id: 3, title: 'Thư gửi Phản Biện' },
     { id: 4, title: 'Thư phản hồi Phản Biện' },
 ];
-
-// const listAuthors = [
-//     { fullName: 'The Shawshank Redemption', _id: 1994 },
-//     { fullName: 'The Godfather', _id: 1972 },
-//     { fullName: 'The Godfather: Part II', _id: 1974 },
-//     { fullName: 'The Dark Knight', _id: 2008 },
-//     { fullName: '12 Angry Men', _id: 1957 },
-//     { fullName: "Schindler's List", _id: 1993 },
-//     { fullName: 'Pulp Fiction', _id: 1994 },
-//     { fullName: 'The Lord of the Rings: The Return of the King', _id: 2003 },
-//     { fullName: 'The Good, the Bad and the Ugly', _id: 1966 },
-//     { fullName: 'Fight Club', _id: 1999 },
-//     {
-//         fullName: 'The Lord of the Rings: The Fellowship of the Ring',
-//         _id: 2001,
-//     },
-//     { fullName: 'Star Wars: Episode V - The Empire Strikes Back', _id: 1980 },
-//     { fullName: 'Forrest Gump', _id: 1994 },
-//     { fullName: 'Inception', _id: 2010 },
-//     { fullName: 'The Lord of the Rings: The Two Towers', _id: 2002 },
-//     { fullName: "One Flew Over the Cuckoo's Nest", _id: 1975 },
-//     { fullName: 'Goodfellas', _id: 1990 },
-// ];

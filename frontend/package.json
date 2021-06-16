@@ -15,6 +15,7 @@
     "classnames": "^2.3.1",
     "formik": "^2.2.6",
     "hoist-non-react-statics": "^3.3.2",
+    "md5": "^2.3.0",
     "prop-types": "^15.7.2",
     "query-string": "^7.0.0",
     "react": "^17.0.1",

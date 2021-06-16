@@ -12,7 +12,7 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -24,6 +24,8 @@ import Orders from './TableArticle';
 import SendArticle from './Author/SendArticle';
 import ListSendedArticle from './Author/ListSendedArticle';
 import ManageArticle from './Editor/ManageArticle';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/auth';
 // import CoutingArticle from './CoutingArticle';
 const drawerWidth = 240;
 
@@ -107,17 +109,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Dashboard() {
-    const classes = useStyles();
     const [open, setOpen] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    const history = useHistory();
 
     const openMenu = Boolean(anchorEl);
-
-    const handleClose = () => {
+    const handleClose = btn => _ => {
+        if (btn === 'logout') {
+            dispatch(logout());
+            history.push('/');
+        }
+        if (btn === 'profile') {
+        }
         setAnchorEl(null);
     };
-    const handleMenu = event => {
-        setAnchorEl(event.currentTarget);
+    const handleMenu = e => {
+        setAnchorEl(e.currentTarget);
     };
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -178,10 +187,12 @@ export default function Dashboard() {
                         open={openMenu}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={handleClose('profile')}>
                             Thông tin cá nhân
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>Đăng xuất</MenuItem>
+                        <MenuItem onClick={handleClose('logout')}>
+                            Đăng xuất
+                        </MenuItem>
                     </Menu>
                 </Toolbar>
             </AppBar>

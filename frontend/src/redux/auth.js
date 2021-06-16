@@ -4,6 +4,7 @@ import axios from 'axios';
 const initialState = {
     token: null,
     isAdmin: null,
+    menu: '',
 };
 
 const auth = createSlice({
@@ -13,6 +14,12 @@ const auth = createSlice({
         signInSuccess(state, action) {
             state.token = action.payload.token;
             state.isAdmin = action.payload.isAdmin;
+            state.menu = action.payload.isAdmin ? 'admin' : 'normaluser';
+        },
+        logout(state, action) {
+            state.isAdmin = null;
+            state.token = null;
+            state.menu = '';
         },
     },
 });
@@ -31,5 +38,5 @@ export const login =
         dispatch(signInSuccess({ token, isAdmin }));
     };
 
-export const { signInSuccess } = auth.actions;
+export const { signInSuccess, logout } = auth.actions;
 export default auth.reducer;
