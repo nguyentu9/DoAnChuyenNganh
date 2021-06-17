@@ -1,31 +1,33 @@
 import {
-    Avatar,
-    Menu,
-    MenuItem,
     AppBar,
+    Avatar,
     Badge,
     Container,
     Divider,
     Drawer,
-    Grid,
     IconButton,
+    Menu,
+    MenuItem,
     Toolbar,
     Typography,
 } from '@material-ui/core';
-import { Route, Switch, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import clsx from 'classnames';
 import React, { useState } from 'react';
-import ListMenu from './ListMenu';
-import Orders from './TableArticle';
-import SendArticle from './Author/SendArticle';
-import ListSendedArticle from './Author/ListSendedArticle';
-import ManageArticle from './Editor/ManageArticle';
 import { useDispatch } from 'react-redux';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { logout } from '../../redux/auth';
+import ArticleSubmissionForm from './Author/ArticleSubmissionForm';
+import ListArticles from './Author/ListArticles';
+import ListArticlesSubmitted from './Author/ListArticlesSubmitted';
+import ArticleManagement from './Editor/ArticleManagement';
+import JournalManagement from './Editor/JournalManagement';
+import LayoutManagement from './Editor/LayoutManagement';
+import UserManagement from './Editor/UserManagement';
+import ListMenu from './ListMenu';
 // import CoutingArticle from './CoutingArticle';
 const drawerWidth = 240;
 
@@ -176,16 +178,16 @@ export default function Dashboard() {
                         id='menu-appbar'
                         anchorEl={anchorEl}
                         anchorOrigin={{
-                            vertical: 'top',
+                            vertical: 'bottom',
                             horizontal: 'right',
                         }}
                         keepMounted
                         transformOrigin={{
-                            vertical: 'top',
+                            vertical: 'bottom',
                             horizontal: 'right',
                         }}
                         open={openMenu}
-                        onClose={handleClose}
+                        onClose={handleClose()}
                     >
                         <MenuItem onClick={handleClose('profile')}>
                             Thông tin cá nhân
@@ -220,27 +222,23 @@ export default function Dashboard() {
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth='lg' className={classes.container}>
                     <Switch>
-                        <Route exact path='/tac-gia/gui-bai-bao'>
-                            <SendArticle />
-                        </Route>
+                        <Route
+                            exact
+                            path='/tac-gia/gui-bai-bao'
+                            component={ArticleSubmissionForm}
+                        />
 
-                        <Route exact path='/tac-gia/tat-ca-bai-bao'>
-                            <Grid container spacing={3}>
-                                {/* <Grid item xs={12}>
-                                    <Paper className={fixedHeightPaper}>
-                                        <CoutingArticle />
-                                    </Paper>
-                                </Grid> */}
+                        <Route
+                            exact
+                            path='/tac-gia/tat-ca-bai-bao'
+                            component={ListArticles}
+                        />
 
-                                <Grid item xs={12}>
-                                    <Orders />
-                                </Grid>
-                            </Grid>
-                        </Route>
-
-                        <Route exact path='/tac-gia/bai-bao-da-gui'>
-                            <ListSendedArticle />
-                        </Route>
+                        <Route
+                            exact
+                            path='/tac-gia/bai-bao-da-gui'
+                            component={ListArticlesSubmitted}
+                        />
 
                         <Route exact path='/tac-gia/xem-phan-bien' />
 
@@ -252,11 +250,23 @@ export default function Dashboard() {
                         <Route
                             exact
                             path='/bien-tap/quan-ly-bai-bao'
-                            component={ManageArticle}
+                            component={ArticleManagement}
                         />
-                        <Route exact path='/bien-tap/quan-ly-tap-chi' />
-                        <Route exact path='/bien-tap/quan-ly-tai-khoan' />
-                        <Route path='/bien-tap/giao-dien' />
+                        <Route
+                            exact
+                            path='/bien-tap/quan-ly-tap-chi'
+                            component={JournalManagement}
+                        />
+                        <Route
+                            exact
+                            path='/bien-tap/quan-ly-tai-khoan'
+                            component={UserManagement}
+                        />
+                        <Route
+                            exact
+                            path='/bien-tap/giao-dien'
+                            component={LayoutManagement}
+                        />
                     </Switch>
                 </Container>
             </main>

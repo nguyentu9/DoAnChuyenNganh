@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     },
 });
 
-function ListSendedArticle() {
+function ListArticlesSubmitted() {
     const classes = useStyles();
 
     return (
@@ -83,4 +83,4 @@ function ListSendedArticle() {
     );
 }
 
-export default ListSendedArticle;
+export default ListArticlesSubmitted;

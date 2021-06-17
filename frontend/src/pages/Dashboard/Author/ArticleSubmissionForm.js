@@ -33,7 +33,7 @@ const validationSchema = {
     fileNames: yup.array().min(1, 'Tập tin chưa được tải lên'),
 };
 
-function SendArticle() {
+function ArticleSubmissionForm() {
     const [articleTypes, setArticleTypes] = useState([]);
     const [listAuthors, setListAuthors] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -390,7 +390,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default SendArticle;
+export default ArticleSubmissionForm;
 
 const listFileNames = [
     { id: 0, title: 'Bản thảo bài báo (*)' },

@@ -1,22 +1,22 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
+    Chip,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
-    Paper,
-    Chip,
     TablePagination,
+    TableRow,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import DoneIcon from '@material-ui/icons/Done';
 import WarningIcon from '@material-ui/icons/Warning';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import React from 'react';
 import data from '../../data';
 
-function TableArticle() {
+function ArticleTable() {
     const classes = useStyles();
     let n = 1;
     return (
@@ -39,8 +39,8 @@ function TableArticle() {
                     </TableHead>
                     <TableBody>
                         {data.map(row => (
-                            <TableRow key={row._id}>
-                                <TableCell align='left'>{n++}</TableCell>
+                            <TableRow key={row._id} hover>
+                                <TableCell align='center'>{n++}</TableCell>
                                 <TableCell
                                     component='th'
                                     scope='row'
@@ -125,7 +125,7 @@ function TableArticle() {
         </>
     );
 }
-export default TableArticle;
+export default ArticleTable;
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
