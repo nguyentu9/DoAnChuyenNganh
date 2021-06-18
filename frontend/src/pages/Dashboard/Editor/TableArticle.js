@@ -14,14 +14,15 @@ import {
 import DoneIcon from '@material-ui/icons/Done';
 import WarningIcon from '@material-ui/icons/Warning';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
-import data from '../../../data';
+import d from '../../../data';
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
 });
 
-function TableArticle() {
+function TableArticle(props) {
+    const data = props.data || d;
     const classes = useStyles();
     let n = 1;
     return (
@@ -31,7 +32,6 @@ function TableArticle() {
                     <TableHead>
                         <TableRow>
                             <TableCell align='left'>STT</TableCell>
-                            {/* <TableCell align='left'>Mã</TableCell> */}
                             <TableCell align='center' width='30%'>
                                 Tên bài báo
                             </TableCell>

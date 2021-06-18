@@ -24,6 +24,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import CircularProgress from '../../../components/CircularProgress/CircularProgress';
+import authorApi from '../../../api/authorApi';
+import articleApi from '../../../api/articleApi';
 const validationSchema = {
     title: yup.string().trim().required('Tiêu đề không được rỗng'),
     brief: yup.string().trim().required('Tóm tắt không được rỗng'),
@@ -81,7 +83,7 @@ function ArticleSubmissionForm() {
                 },
             };
             axios
-                .post('http://localhost:3001/api/v1/article', data, config)
+                .post('http://localhost:3001/api/v1/articles', data, config)
                 .then(res => {
                     notify();
                     console.log(JSON.stringify(res.data));
@@ -103,10 +105,7 @@ function ArticleSubmissionForm() {
     useEffect(() => {
         async function fetchArticleTypes() {
             try {
-                const res = await axios.get(
-                    'http://localhost:3001/api/v1/articleTypes'
-                );
-                const { data } = res;
+                const data = await articleApi.getType();
                 setArticleTypes(data);
             } catch (e) {
                 console.error(e);
@@ -118,12 +117,8 @@ function ArticleSubmissionForm() {
     useEffect(() => {
         async function fetchAuthor() {
             try {
-                const res = await axios.get(
-                    `${process.env.REACT_APP_API_URL}/api/v1/authors`
-                );
-                const { data } = res;
+                const data = await authorApi.getAll();
                 setListAuthors(data);
-                console.log(data);
             } catch (e) {
                 console.error(e);
             }
@@ -252,7 +247,7 @@ function ArticleSubmissionForm() {
                     <Autocomplete
                         required
                         style={{ marginBottom: '.7rem' }}
-                        multiple
+                        multiple={true}
                         id='author'
                         limitTags={3}
                         options={listAuthors}
@@ -263,6 +258,7 @@ function ArticleSubmissionForm() {
                         filterSelectedOptions
                         renderInput={params => (
                             <TextField
+                                error={true}
                                 {...params}
                                 variant='outlined'
                                 label='Danh Sách Tác Giả'

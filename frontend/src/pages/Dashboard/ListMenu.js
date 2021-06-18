@@ -146,6 +146,7 @@ function ListMenu() {
                         <List component='div' disablePadding>
                             {editorNavLinks.map(link => (
                                 <NavLink
+                                    key={link.label}
                                     exact
                                     className={classes.link}
                                     to={link.to}
@@ -190,6 +191,7 @@ function ListMenu() {
                         <List component='div' disablePadding>
                             {authorNavLinks.map(link => (
                                 <NavLink
+                                    key={link.label}
                                     exact
                                     className={classes.link}
                                     to={link.to}
@@ -232,6 +234,7 @@ function ListMenu() {
                         <List component='div' disablePadding>
                             {reviewerNavLinks.map(link => (
                                 <NavLink
+                                    key={link.label}
                                     exact
                                     className={classes.link}
                                     to={link.to}

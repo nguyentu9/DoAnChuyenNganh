@@ -14,9 +14,10 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 import DoneIcon from '@material-ui/icons/Done';
 import WarningIcon from '@material-ui/icons/Warning';
 import React from 'react';
-import data from '../../data';
+import d from '../../data';
 
-function ArticleTable() {
+function ArticleTable(props) {
+    const data = props.data || d;
     const classes = useStyles();
     let n = 1;
     return (
