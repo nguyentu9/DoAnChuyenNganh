@@ -3,14 +3,20 @@
 GET {{hostname}}
 
 ###
+
+GET {{hostname}}/api/v1/articles/types
+###
+GET {{hostname}}/api/v1/articleTypes
+###
 // User SignIn
 POST {{hostname}}/api/v1/auth/signin
 Content-Type: application/json
 
 {
     "userName":"toan",
-    "passWord": "123"
+    "passWord": "202cb962ac59075b964b07152d234b70"
 }
+
 
 ###
 // Get all users

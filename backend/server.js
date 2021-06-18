@@ -1,17 +1,18 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import morgan from 'morgan'
 import connectDB from './config/db.js'
-
 dotenv.config()
 import path from 'path'
 import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+import { validationResult } from 'express-validator'
+
+import { Article } from './models/articleModel.js'
 
 import uploadFile from './services/upload.js'
-import { Article } from './models/articleModel.js'
-import { Type } from './models/typeModel.js'
 import { uploadArticleSchema } from './services/validator.js'
 
 import authRoute from './router/auth.router.js'
@@ -19,12 +20,12 @@ import userRoute from './router/user.router.js'
 import majorRoute from './router/major.router.js'
 import degreeRoute from './router/degree.router.js'
 import authorRoute from './router/author.router.js'
-
-import { validationResult } from 'express-validator'
-import { User } from './models/userModel.js'
-
+import articleRoute from './router/article.route.js'
+import { signIn, isAdmin } from './middleware/auth.mdw.js'
+import articleStatus from './services/articleStatus.js'
 const app = express()
 app.use(cors())
+app.use(morgan('tiny'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -33,30 +34,15 @@ const PORT = process.env.PORT || 3001
 
 app.get('/', (req, res) => res.send('API is running'))
 
-app.use('/api/v1/auth', authRoute)
-app.use('/api/v1/users', userRoute)
-app.use('/api/v1/majors', majorRoute)
-app.use('/api/v1/degrees', degreeRoute)
 app.use('/api/v1/authors', authorRoute)
+app.use('/api/v1/auth', authRoute)
+app.use('/api/v1/degrees', degreeRoute)
+app.use('/api/v1/majors', majorRoute)
+app.use('/api/v1/users', signIn, isAdmin, userRoute)
+app.use('/api/v1/articles', articleRoute)
 
-app.get('/api/v1/hotArticles', (req, res) => {})
-
-app.get('/api/v1/newsestArticles', (req, res) => {})
-
-app.get('/api/v1/articleTypes', async (req, res) => {
-    try {
-        const types = await Type.find()
-        res.json(types)
-    } catch (err) {
-        console.error(err)
-    }
-})
-
-app.get('/api/v1/articles', (req, res) => {})
-
-// need to put middleware check isUser before add a new article
 app.post(
-    '/api/v1/article',
+    '/api/v1/articles',
     uploadFile,
     uploadArticleSchema,
     async (req, res) => {
@@ -87,12 +73,13 @@ app.post(
                 type: JSON.parse(type),
                 author: JSON.parse(author),
                 attachments,
+                status: [articleStatus.pending()],
             })
             article.save()
             res.json({
                 status: 200,
                 message: 'Tập tin được tải lên thành công',
-                fileNameInServer: '',
+                // fileNameInServer: '',
             })
         } catch (err) {
             res.json({

@@ -39,9 +39,9 @@ const articleSchema = mongoose.Schema(
         attachments: [],
         imageURL: {
             type: String,
-            default:''
+            default: '',
         },
-        status: [String],
+        status: [],
     },
     {
         timestamps: true,

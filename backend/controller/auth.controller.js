@@ -6,11 +6,10 @@ export const signin = async (req, res) => {
     const { userName, passWord } = req.body
 
     if (!userName || !passWord) {
-        res.json({
+        return res.json({
             status: 401,
             message: 'Tài khoản hoặc mật khẩu rỗng',
         })
-        return
     }
 
     const user = await User.findOne(
@@ -19,23 +18,23 @@ export const signin = async (req, res) => {
     )
 
     if (!user) {
-        res.json({
+        return res.json({
             status: 401,
             message: 'Tài khoản không tồn tại',
         })
-        return
     }
     if (user.passWord != passWord) {
-        res.json({
+        return res.json({
             status: 401,
             message: 'Tài khoản hoặc mật khẩu sai',
         })
-        return
     }
 
-    let { _id: id, isAdmin } = user
-    const token = await jwt.sign({ id, isAdmin }, process.env.JWT_KEY, {
-        expiresIn: '1h',
+    const { _id, isAdmin } = user
+
+    let userDetail = await UserDetail.findOne({ _id })
+    const token = await jwt.sign({ id: _id, isAdmin }, process.env.JWT_KEY, {
+        expiresIn: process.env.ACCESS_TOKEN_LIFE || '1h',
     })
 
     res.status(200).json({
@@ -43,6 +42,8 @@ export const signin = async (req, res) => {
         message: 'Đăng nhập thành công',
         token,
         isAdmin,
+        fullName: userDetail?.fullName || '',
+        _id,
     })
 }
 
@@ -59,39 +60,36 @@ export const signup = async (req, res) => {
         organization,
         address,
     } = req.body
+
     if (passWord !== confirmPassword) {
-        res.json({
+        return res.json({
             status: 409,
             message: 'Mật khẩu không khớp',
         })
-        return
     }
 
     let user = await User.findOne({ userName })
     if (user) {
-        res.json({
+        return res.json({
             status: 409,
             message: 'Tên đăng nhập đã tồn tại',
         })
-        return
     }
 
     user = await UserDetail.findOne({ email: emailAddr })
     if (user) {
-        res.json({
+        return res.json({
             status: 409,
             message: 'Email đã tồn tại',
         })
-        return
     }
 
     user = await UserDetail.findOne({ phone })
     if (user) {
-        res.json({
+        return res.json({
             status: 409,
             message: 'Số điện thoại đã tồn tại',
         })
-        return
     }
     try {
         const newUser = new User({ userName, passWord: md5(passWord) })
