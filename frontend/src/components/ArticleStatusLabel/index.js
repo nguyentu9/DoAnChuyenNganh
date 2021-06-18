@@ -19,7 +19,6 @@ function ArticleStatusLabel({ status }) {
                     icon={<AutorenewIcon style={{ color: '#ea9e10' }} />}
                 />
             );
-            break;
         case 1:
             return (
                 <Chip

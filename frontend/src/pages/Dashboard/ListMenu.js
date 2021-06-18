@@ -4,6 +4,7 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
@@ -43,22 +44,26 @@ const authorNavLinks = [
         to: '/tac-gia/gui-bai-bao',
         label: 'Gửi bài báo',
         icon: <SendIcon />,
+        toolTip: 'Gửi bài báo',
     },
     {
         to: '/tac-gia/tat-ca-bai-bao',
         label: 'Tất cả bài báo',
         icon: <ListAltIcon />,
+        toolTip: 'Xem danh sách tất cả bài báo',
     },
     {
         to: '/tac-gia/bai-bao-da-gui',
         label: 'Bài báo đã gửi',
         icon: <PlaylistAddCheckIcon />,
+        toolTip: 'Xem danh sách bài báo đã gửi',
     },
 
     {
         to: '/tac-gia/xem-phan-bien',
         label: 'Xem phản biện',
         icon: <PageviewOutlinedIcon />,
+        toolTip: 'Xem phản biện bài báo',
     },
 ];
 
@@ -146,8 +151,8 @@ function ListMenu() {
                         <List component='div' disablePadding>
                             {editorNavLinks.map(link => (
                                 <NavLink
-                                    key={link.label}
                                     exact
+                                    key={link.label}
                                     className={classes.link}
                                     to={link.to}
                                     underline='none'
@@ -156,13 +161,23 @@ function ListMenu() {
                                         backgroundColor: '#EEE',
                                     }}
                                 >
-                                    <ListItem
-                                        button
-                                        style={{ paddingLeft: '1.2rem' }}
+                                    <Tooltip
+                                        title={link.toolTip}
+                                        arrow
+                                        interactive
                                     >
-                                        <ListItemIcon>{link.icon}</ListItemIcon>
-                                        <ListItemText primary={link.label} />
-                                    </ListItem>
+                                        <ListItem
+                                            button
+                                            style={{ paddingLeft: '1.2rem' }}
+                                        >
+                                            <ListItemIcon>
+                                                {link.icon}
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={link.label}
+                                            />
+                                        </ListItem>
+                                    </Tooltip>
                                 </NavLink>
                             ))}
                         </List>
@@ -191,8 +206,8 @@ function ListMenu() {
                         <List component='div' disablePadding>
                             {authorNavLinks.map(link => (
                                 <NavLink
-                                    key={link.label}
                                     exact
+                                    key={link.label}
                                     className={classes.link}
                                     to={link.to}
                                     underline='none'
@@ -201,6 +216,13 @@ function ListMenu() {
                                         backgroundColor: '#EEE',
                                     }}
                                 >
+                                    {/* <Tooltip
+                                        title={link.toolTip}
+                                        interactive
+                                        enterDelay={700}
+                                        placement='right'
+                                        arrow
+                                    > */}
                                     <ListItem
                                         button
                                         style={{ paddingLeft: '1.2rem' }}
@@ -208,6 +230,7 @@ function ListMenu() {
                                         <ListItemIcon>{link.icon}</ListItemIcon>
                                         <ListItemText primary={link.label} />
                                     </ListItem>
+                                    {/* </Tooltip> */}
                                 </NavLink>
                             ))}
                         </List>

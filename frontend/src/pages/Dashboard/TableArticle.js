@@ -6,12 +6,12 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TablePagination,
     TableRow,
     Tooltip,
 } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import ArticleStatusLabel from '../../components/ArticleStatusLabel';
 import { useHistory } from 'react-router-dom';
 
@@ -29,11 +29,14 @@ function convertDate(date) {
 }
 
 function ArticleTable({ articles }) {
+    const [page, setPage] = useState(1);
     const history = useHistory();
     const handleNavigation = articleID => _ => {
         history.push(`/tac-gia/bai-bao/${articleID}`);
     };
-
+    const handlePageChange = (event, value) => {
+        setPage(value);
+    };
     const classes = useStyles();
     let n = 1;
     return (
@@ -101,16 +104,13 @@ function ArticleTable({ articles }) {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {/* <TablePagination
-                rowsPerPageOptions={[5, 10, 20]}
-                labelRowsPerPage='Số dòng'
-                component='div'
-                count={articles.length}
-                rowsPerPage={10}
-                page={2}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage} 
-            />*/}
+            <Pagination
+                count={5}
+                page={page}
+                size='large'
+                onChange={handlePageChange}
+                style={{ marginTop: '1rem' }}
+            />
         </>
     );
 }

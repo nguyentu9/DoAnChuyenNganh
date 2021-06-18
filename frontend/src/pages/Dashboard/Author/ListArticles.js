@@ -20,7 +20,7 @@ function ListArticles() {
             }
         }
         fetchAllArticles();
-    }, []);
+    }, [history, dispatch]);
 
     return (
         <>

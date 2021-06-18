@@ -4,7 +4,8 @@ export const statusID = {
     INREVIEW: 2,
     AGREE: 3,
     DISAGREE: 4,
-    REJECT: 5,
+    PUBLISHED: 5,
+    REJECT: 6,
 }
 
 export default {
@@ -35,6 +36,14 @@ export default {
             label: 'Không chấp nhận',
             date: Date.now(),
             feedback: [{ order: orderOfReviewer, msg: message }],
+        }
+    },
+    published(message) {
+        return {
+            id: statusID.PUBLISHED,
+            label: 'Chấp nhận đăng',
+            date: Date.now(),
+            feedback: [{ msg: message }],
         }
     },
     reject() {

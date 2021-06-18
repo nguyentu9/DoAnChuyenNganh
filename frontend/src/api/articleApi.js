@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient';
 
-export default {
+const articleApi = {
     getAll: params => {
         const url = '/articles';
         return axiosClient.get(url, { params });
@@ -18,3 +18,5 @@ export default {
         return axiosClient.get(url);
     },
 };
+
+export default articleApi;

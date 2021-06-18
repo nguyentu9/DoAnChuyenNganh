@@ -1,8 +1,9 @@
 import axioClient from './axiosClient';
-
-export default {
+const authorApi = {
     getAll: params => {
         const url = '/authors';
         return axioClient.get(url);
     },
 };
+
+export default authorApi;

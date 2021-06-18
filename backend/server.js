@@ -22,7 +22,7 @@ import degreeRoute from './router/degree.router.js'
 import authorRoute from './router/author.router.js'
 import articleRoute from './router/article.route.js'
 import { signIn, isAdmin } from './middleware/auth.mdw.js'
-import articleStatus from './services/articleStatus.js'
+import articleStatus from './services/generateArticleStatus.js'
 const app = express()
 app.use(cors())
 app.use(morgan('tiny'))

@@ -267,7 +267,7 @@ function ArticleSubmissionForm() {
                             setFieldValue('author', [
                                 fixedAuthor,
                                 ...newValue.filter(
-                                    author => author != fixedAuthor
+                                    author => author !== fixedAuthor
                                 ),
                             ])
                         }
@@ -283,7 +283,6 @@ function ArticleSubmissionForm() {
                         }
                         renderInput={params => (
                             <TextField
-                                error={true}
                                 {...params}
                                 variant='outlined'
                                 label='Danh Sách Tác Giả'
