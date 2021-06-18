@@ -20,6 +20,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { logout } from '../../redux/auth';
+import ArticleDetail from './ArticleDetail';
 import ArticleSubmissionForm from './Author/ArticleSubmissionForm';
 import ListArticles from './Author/ListArticles';
 import ListArticlesSubmitted from './Author/ListArticlesSubmitted';
@@ -28,7 +29,7 @@ import JournalManagement from './Editor/JournalManagement';
 import LayoutManagement from './Editor/LayoutManagement';
 import UserManagement from './Editor/UserManagement';
 import ListMenu from './ListMenu';
-// import CoutingArticle from './CoutingArticle';
+import { useSelector } from 'react-redux';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -111,12 +112,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Dashboard() {
+    const userFullName = useSelector(state => state.auth.fullName);
     const [open, setOpen] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
 
+    let firstName = userFullName.split('').reverse()[0];
     const openMenu = Boolean(anchorEl);
     const handleClose = btn => _ => {
         if (btn === 'logout') {
@@ -164,7 +167,7 @@ export default function Dashboard() {
                         noWrap
                         className={classes.title}
                     >
-                        Dashboard
+                        Bảng điều khiển
                     </Typography>
                     <IconButton color='inherit'>
                         <Badge badgeContent={4} color='secondary'>
@@ -172,18 +175,18 @@ export default function Dashboard() {
                         </Badge>
                     </IconButton>
                     <IconButton onClick={handleMenu}>
-                        <Avatar>T</Avatar>
+                        <Avatar>{firstName?.[0] || 'AD'}</Avatar>
                     </IconButton>
                     <Menu
                         id='menu-appbar'
                         anchorEl={anchorEl}
                         anchorOrigin={{
-                            vertical: 'bottom',
+                            vertical: 'top',
                             horizontal: 'right',
                         }}
                         keepMounted
                         transformOrigin={{
-                            vertical: 'bottom',
+                            vertical: 'top',
                             horizontal: 'right',
                         }}
                         open={openMenu}
@@ -241,6 +244,11 @@ export default function Dashboard() {
                         />
 
                         <Route exact path='/tac-gia/xem-phan-bien' />
+                        <Route
+                            exact
+                            path='/tac-gia/bai-bao/:articleID'
+                            component={ArticleDetail}
+                        />
 
                         <Route exact path='/phan-bien/phan-bien-bai-bao' />
 

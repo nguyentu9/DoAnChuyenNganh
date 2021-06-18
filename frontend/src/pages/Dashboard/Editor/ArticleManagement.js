@@ -163,14 +163,6 @@ function ListJournal() {
 
 export default ListJournal;
 
-function a11yProps(index) {
-    return {
-        // id: `scrollable-auto-tab-${index}`,
-        // 'aria-controls': `scrollable-auto-tabpanel-${index}`,
-        id: '',
-    };
-}
-
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,

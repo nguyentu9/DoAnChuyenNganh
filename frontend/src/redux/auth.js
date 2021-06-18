@@ -5,6 +5,8 @@ const initialState = {
     token: null,
     isAdmin: null,
     menu: '',
+    _id: '',
+    fullName: '',
 };
 
 const auth = createSlice({
@@ -12,14 +14,19 @@ const auth = createSlice({
     initialState,
     reducers: {
         signInSuccess(state, action) {
-            state.token = action.payload.token;
-            state.isAdmin = action.payload.isAdmin;
-            state.menu = action.payload.isAdmin ? 'admin' : 'normaluser';
+            let { token, isAdmin, _id, fullName } = action.payload;
+            state._id = _id;
+            state.fullName = fullName;
+            state.token = token;
+            state.isAdmin = isAdmin;
+            state.menu = isAdmin ? 'admin' : 'normaluser';
         },
         logout(state, action) {
             state.isAdmin = null;
             state.token = null;
             state.menu = '';
+            state._id = '';
+            state.fullName = '';
         },
     },
 });
@@ -34,8 +41,7 @@ export const login =
                 passWord,
             }
         );
-        const { token, isAdmin } = res.data;
-        dispatch(signInSuccess({ token, isAdmin }));
+        dispatch(signInSuccess(res.data));
     };
 
 export const { signInSuccess, logout } = auth.actions;

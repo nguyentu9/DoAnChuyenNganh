@@ -1,6 +1,7 @@
 import {
     Avatar,
     Button,
+    Chip,
     Grid,
     IconButton,
     List,
@@ -26,6 +27,7 @@ import * as yup from 'yup';
 import CircularProgress from '../../../components/CircularProgress/CircularProgress';
 import authorApi from '../../../api/authorApi';
 import articleApi from '../../../api/articleApi';
+import { useSelector } from 'react-redux';
 const validationSchema = {
     title: yup.string().trim().required('Tiêu đề không được rỗng'),
     brief: yup.string().trim().required('Tóm tắt không được rỗng'),
@@ -40,7 +42,8 @@ function ArticleSubmissionForm() {
     const [listAuthors, setListAuthors] = useState([]);
     const [progress, setProgress] = useState(0);
     const classes = useStyles();
-
+    const currentUserID = useSelector(state => state.auth._id);
+    const fixedAuthor = listAuthors.find(el => el._id === currentUserID);
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -229,7 +232,12 @@ function ArticleSubmissionForm() {
                         options={articleTypes}
                         getOptionLabel={type => type.name}
                         onOpen={handleBlur}
-                        onChange={(_, value) => setFieldValue('type', value)}
+                        onChange={(_, value) => {
+                            setFieldValue('type', value);
+                            if (values.author.length === 0) {
+                                values.author.push(fixedAuthor);
+                            }
+                        }}
                         filterSelectedOptions
                         renderInput={params => (
                             <TextField
@@ -249,13 +257,30 @@ function ArticleSubmissionForm() {
                         style={{ marginBottom: '.7rem' }}
                         multiple={true}
                         id='author'
+                        value={values.author}
                         limitTags={3}
                         options={listAuthors}
                         getOptionLabel={({ fullName, email, org }) =>
                             `${fullName} - ${email} - ${org}`
                         }
-                        onChange={(_, value) => setFieldValue('author', value)}
+                        onChange={(_, newValue) =>
+                            setFieldValue('author', [
+                                fixedAuthor,
+                                ...newValue.filter(
+                                    author => author != fixedAuthor
+                                ),
+                            ])
+                        }
                         filterSelectedOptions
+                        renderTags={(tagValue, getTagProps) =>
+                            tagValue.map((author, index) => (
+                                <Chip
+                                    label={author.fullName}
+                                    {...getTagProps({ index })}
+                                    disabled={fixedAuthor._id === author._id}
+                                />
+                            ))
+                        }
                         renderInput={params => (
                             <TextField
                                 error={true}
@@ -370,7 +395,6 @@ function ArticleSubmissionForm() {
                         Gửi
                     </Button>
                 </form>
-                {/* </Grid> */}
             </Grid>
         </>
     );

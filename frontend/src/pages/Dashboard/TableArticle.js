@@ -8,16 +8,32 @@ import {
     TableHead,
     TablePagination,
     TableRow,
+    Tooltip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
-import DoneIcon from '@material-ui/icons/Done';
-import WarningIcon from '@material-ui/icons/Warning';
 import React from 'react';
-import d from '../../data';
+import ArticleStatusLabel from '../../components/ArticleStatusLabel';
+import { useHistory } from 'react-router-dom';
 
-function ArticleTable(props) {
-    const data = props.data || d;
+function convertDate(date) {
+    let dt = new Date(date);
+    return `${dt.getDate().toString().padStart(2, '0')}/${(dt.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}/${dt.getFullYear().toString().padStart(4, '0')} ${dt
+        .getHours()
+        .toString()
+        .padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}:${dt
+        .getSeconds()
+        .toString()
+        .padStart(2, '0')}`;
+}
+
+function ArticleTable({ articles }) {
+    const history = useHistory();
+    const handleNavigation = articleID => _ => {
+        history.push(`/tac-gia/bai-bao/${articleID}`);
+    };
+
     const classes = useStyles();
     let n = 1;
     return (
@@ -39,90 +55,62 @@ function ArticleTable(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map(row => (
-                            <TableRow key={row._id} hover>
-                                <TableCell align='center'>{n++}</TableCell>
-                                <TableCell
-                                    component='th'
-                                    scope='row'
-                                    style={{ minWidth: '200px' }}
+                        {articles.map(article => (
+                            <Tooltip
+                                title='Nhấn vào để xem chi tiết'
+                                placement='top'
+                                arrow
+                                interactive
+                            >
+                                <TableRow
+                                    key={article._id}
+                                    hover
+                                    onClick={handleNavigation(article._id)}
                                 >
-                                    {row.title}
-                                </TableCell>
-                                <TableCell align='center' width='10%'>
-                                    {row.type.map(item => (
-                                        <Chip
-                                            label={item.name}
-                                            style={{ margin: '3px' }}
+                                    <TableCell align='center'>{n++}</TableCell>
+                                    <TableCell
+                                        component='th'
+                                        scope='row'
+                                        style={{ minWidth: '200px' }}
+                                    >
+                                        {article.title}
+                                    </TableCell>
+                                    <TableCell align='center' width='10%'>
+                                        {article.type.map((item, i) => (
+                                            <Chip
+                                                key={i}
+                                                label={item.name}
+                                                style={{ margin: '3px' }}
+                                            />
+                                        ))}
+                                    </TableCell>
+                                    <TableCell align='right' width='10%'>
+                                        <ArticleStatusLabel
+                                            status={article.status[0]}
                                         />
-                                    ))}
-                                </TableCell>
-                                <TableCell align='right' width='10%'>
-                                    <Chip
-                                        variant='outlined'
-                                        style={{
-                                            border: '#ea9e10 1px solid',
-                                            color: '#ea9e10',
-                                        }}
-                                        size='small'
-                                        label='Đợi duyệt'
-                                        icon={
-                                            <AutorenewIcon
-                                                style={{ color: '#ea9e10' }}
-                                            />
-                                        }
-                                    />
-                                    <Chip
-                                        variant='outlined'
-                                        style={{
-                                            border: '#f44336 1px solid',
-                                            color: '#f44336',
-                                        }}
-                                        size='small'
-                                        label='Từ chối'
-                                        icon={
-                                            <WarningIcon
-                                                style={{ color: '#f44336' }}
-                                            />
-                                        }
-                                    />
-                                    <Chip
-                                        variant='outlined'
-                                        style={{
-                                            border: '#61af61 1px solid',
-                                            color: '#61af61',
-                                        }}
-                                        size='small'
-                                        label='Chấp nhận đăng'
-                                        icon={
-                                            <DoneIcon
-                                                style={{ color: '#61af61' }}
-                                            />
-                                        }
-                                    />
-                                    {row.status.map(item => item.name + ',')}
-                                </TableCell>
-                                <TableCell align='right'>
-                                    {row.receivedDate}
-                                </TableCell>
-                                <TableCell align='right'>
-                                    {row.receivedDate}
-                                </TableCell>
-                            </TableRow>
+                                    </TableCell>
+                                    <TableCell align='right'>
+                                        {convertDate(article.receivedDate)}
+                                    </TableCell>
+                                    <TableCell align='right'>
+                                        {convertDate(article.receivedDate)}
+                                    </TableCell>
+                                </TableRow>
+                            </Tooltip>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
+            {/* <TablePagination
                 rowsPerPageOptions={[5, 10, 20]}
                 labelRowsPerPage='Số dòng'
                 component='div'
-                count={data.length}
-                // rowsPerPage={10}
-                // page={2}
-                // onChangePage={handleChangePage}
-                // onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
+                count={articles.length}
+                rowsPerPage={10}
+                page={2}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage} 
+            />*/}
         </>
     );
 }
