@@ -4,8 +4,9 @@ export const statusID = {
     INREVIEW: 2,
     AGREE: 3,
     DISAGREE: 4,
-    PUBLISHED: 5,
-    REJECT: 6,
+    REVISED: 5,
+    PUBLISHED: 6,
+    REJECT: 7,
 }
 
 export default {
@@ -27,7 +28,7 @@ export default {
             id: statusID.AGREE,
             label: 'Chấp nhận',
             date: Date.now(),
-            feedback: [{ order: orderOfReviewer, msg: message }],
+            feedback: { order: orderOfReviewer, msg: message },
         }
     },
     disagree(orderOfReviewer, message) {
@@ -35,7 +36,15 @@ export default {
             id: statusID.DISAGREE,
             label: 'Không chấp nhận',
             date: Date.now(),
-            feedback: [{ order: orderOfReviewer, msg: message }],
+            feedback: { order: orderOfReviewer, msg: message },
+        }
+    },
+    revised(orderOfAuthor, message) {
+        return {
+            id: statusID.REVISED,
+            label: 'Đã chỉnh sửa',
+            date: Date.now(),
+            feedback: { order: orderOfAuthor, msg: message },
         }
     },
     published(message) {
@@ -43,7 +52,7 @@ export default {
             id: statusID.PUBLISHED,
             label: 'Chấp nhận đăng',
             date: Date.now(),
-            feedback: [{ msg: message }],
+            feedback: { msg: message },
         }
     },
     reject() {
