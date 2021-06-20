@@ -17,101 +17,22 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import clsx from 'classnames';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { logout } from '../../redux/auth';
 import ArticleDetail from './ArticleDetail';
-import ArticleSubmissionForm from './Author/ArticleSubmissionForm';
-import ListArticles from './Author/ListArticles';
-import ListArticlesSubmitted from './Author/ListArticlesSubmitted';
-import ArticleManagement from './Editor/ArticleManagement';
-import JournalManagement from './Editor/JournalManagement';
-import LayoutManagement from './Editor/LayoutManagement';
-import UserManagement from './Editor/UserManagement';
+import ArticleSubmissionForm from './Author/ArticleSubmissionForm/index';
+import ListArticles from './Author/ListArticles/index';
+import ListArticlesSubmitted from './Author/ListArticlesSubmitted/index';
+
+import ArticleManagement from './Editor/ArticleManagement/index';
+import JournalManagement from './Editor/JournalManagement/index';
+import LayoutManagement from './Editor/LayoutManagement/index';
+import UserManagement from './Editor/UserManagement/index';
 import ListMenu from './ListMenu';
-import { useSelector } from 'react-redux';
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-    },
-    toolbar: {
-        paddingRight: 24, // keep right padding when drawer closed
-    },
-    toolbarIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-    },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    appBarShift: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    menuButton: {
-        marginRight: 36,
-    },
-    menuButtonHidden: {
-        display: 'none',
-    },
-    title: {
-        flexGrow: 1,
-    },
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerPaperClose: {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
-        },
-    },
-    appBarSpacer: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto',
-    },
-    container: {
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4),
-    },
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
-    },
-    fixedHeight: {
-        height: 150,
-    },
-}));
-
-export default function Dashboard() {
+function Dashboard() {
     const userFullName = useSelector(state => state.auth.fullName);
     const [open, setOpen] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -262,6 +183,11 @@ export default function Dashboard() {
                         />
                         <Route
                             exact
+                            path='/bien-tap/bai-bao/:articleID'
+                            component={ArticleDetail}
+                        />
+                        <Route
+                            exact
                             path='/bien-tap/quan-ly-tap-chi'
                             component={JournalManagement}
                         />
@@ -281,3 +207,83 @@ export default function Dashboard() {
         </div>
     );
 }
+export default Dashboard;
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+    },
+    toolbar: {
+        paddingRight: 24, // keep right padding when drawer closed
+    },
+    toolbarIcon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    menuButton: {
+        marginRight: 36,
+    },
+    menuButtonHidden: {
+        display: 'none',
+    },
+    title: {
+        flexGrow: 1,
+    },
+    drawerPaper: {
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerPaperClose: {
+        overflowX: 'hidden',
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: theme.spacing(7),
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing(9),
+        },
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        height: '100vh',
+        overflow: 'auto',
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+    },
+    fixedHeight: {
+        height: 150,
+    },
+}));

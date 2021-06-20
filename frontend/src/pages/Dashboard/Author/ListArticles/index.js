@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import TableArticle from '../TableArticle';
-import articleApi from '../../../api/articleApi';
+import TableArticle from '../../TableArticle';
+import articleApi from '../../../../api/articleApi';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../../redux/auth';
+import { logout } from '../../../../redux/auth';
 import { useHistory } from 'react-router-dom';
 import { Grid, Typography } from '@material-ui/core';
 function ListArticles() {
@@ -13,10 +13,10 @@ function ListArticles() {
         async function fetchAllArticles() {
             try {
                 const data = await articleApi.getAllWithUser('author');
-                setArticles(data);
+                setArticles(data ? data : []);
             } catch (e) {
                 dispatch(logout());
-                return history.push('/dang-nhap');
+                return history.replace('/dang-nhap');
             }
         }
         fetchAllArticles();
@@ -33,7 +33,7 @@ function ListArticles() {
                 <Typography variant='h5' gutterBottom>
                     DANH SÁCH BÀI BÁO
                 </Typography>
-                <TableArticle articles={articles} />
+                {articles && <TableArticle articles={articles} />}
             </Grid>
         </>
     );

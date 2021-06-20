@@ -36,6 +36,7 @@ const articleSchema = mongoose.Schema(
             //     ref: 'UserDetail',
             // },
         ],
+        reviewer: [],
         attachments: [],
         imageURL: {
             type: String,

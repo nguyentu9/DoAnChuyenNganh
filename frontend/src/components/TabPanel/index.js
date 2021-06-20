@@ -6,7 +6,7 @@ function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
         <div
-            role="tabpanel"
+            role='tabpanel'
             hidden={value !== index}
             id={`vertical-tabpanel-${index}`}
             aria-labelledby={`vertical-tab-${index}`}
@@ -21,5 +21,4 @@ function TabPanel(props) {
     );
 }
 
-
-export default TabPanel
+export default TabPanel;

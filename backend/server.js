@@ -20,12 +20,13 @@ import userRoute from './router/user.router.js'
 import majorRoute from './router/major.router.js'
 import degreeRoute from './router/degree.router.js'
 import authorRoute from './router/author.router.js'
+import reviewerRoute from './router/reviewer.router.js'
 import articleRoute from './router/article.route.js'
 import { signIn, isAdmin } from './middleware/auth.mdw.js'
 import articleStatus from './services/generateArticleStatus.js'
 const app = express()
 app.use(cors())
-app.use(morgan('tiny'))
+app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -34,12 +35,13 @@ const PORT = process.env.PORT || 3001
 
 app.get('/', (req, res) => res.send('API is running'))
 
-app.use('/api/v1/authors', authorRoute)
 app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/degrees', degreeRoute)
 app.use('/api/v1/majors', majorRoute)
-app.use('/api/v1/users', signIn, isAdmin, userRoute)
 app.use('/api/v1/articles', articleRoute)
+app.use('/api/v1/authors', authorRoute)
+app.use('/api/v1/reviewers', signIn, isAdmin, reviewerRoute)
+app.use('/api/v1/users', signIn, isAdmin, userRoute)
 
 app.post(
     '/api/v1/articles',
@@ -63,7 +65,7 @@ app.post(
             for (let i = 0; i < fnames.length; i++) {
                 attachments.push({
                     fileName: fnames[i],
-                    filePath: path.join('upload', req.files[i].filename),
+                    filePath: path.join('uploads', req.files[i].filename),
                 })
             }
             const article = await Article({

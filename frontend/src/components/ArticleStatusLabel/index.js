@@ -76,6 +76,32 @@ function ArticleStatusLabel({ status }) {
                 <Chip
                     variant='outlined'
                     style={{
+                        border: '#ea9e10 1px solid',
+                        color: '#ea9e10',
+                    }}
+                    size='small'
+                    label='Yêu cầu chỉnh sửa'
+                    icon={<SyncProblemIcon style={{ color: '#ea9e10' }} />}
+                />
+            );
+        case 6:
+            return (
+                <Chip
+                    variant='outlined'
+                    style={{
+                        border: '#1E90FF 1px solid',
+                        color: '#1E90FF',
+                    }}
+                    size='small'
+                    label='Đã chỉnh sửa'
+                    icon={<AutorenewIcon style={{ color: '#1E90FF' }} />}
+                />
+            );
+        case 7:
+            return (
+                <Chip
+                    variant='outlined'
+                    style={{
                         border: '#61af61 1px solid',
                         color: '#61af61',
                     }}
@@ -84,7 +110,7 @@ function ArticleStatusLabel({ status }) {
                     icon={<DoneIcon style={{ color: '#61af61' }} />}
                 />
             );
-        case 6:
+        case 8:
             return (
                 <>
                     <Chip

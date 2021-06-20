@@ -24,9 +24,9 @@ import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
-import CircularProgress from '../../../components/CircularProgress/CircularProgress';
-import authorApi from '../../../api/authorApi';
-import articleApi from '../../../api/articleApi';
+import CircularProgress from '../../../../components/CircularProgress/CircularProgress';
+import authorApi from '../../../../api/authorApi';
+import articleApi from '../../../../api/articleApi';
 import { useSelector } from 'react-redux';
 const validationSchema = {
     title: yup.string().trim().required('Tiêu đề không được rỗng'),

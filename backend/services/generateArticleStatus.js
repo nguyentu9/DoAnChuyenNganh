@@ -4,9 +4,55 @@ export const statusID = {
     INREVIEW: 2,
     AGREE: 3,
     DISAGREE: 4,
-    REVISED: 5,
-    PUBLISHED: 6,
-    REJECT: 7,
+    REQUIRES_EDITING: 5,
+    REVISED: 6,
+    PUBLISHED: 7,
+    REJECT: 8,
+}
+export const statusObj = {
+    0: () => ({ id: statusID.PENDING, label: 'Đợi duyệt', date: Date.now() }),
+    1: () => ({ id: statusID.SUBMITTED, label: 'Đã duyệt', date: Date.now() }),
+    2: () => ({
+        id: statusID.INREVIEW,
+        label: 'Đang phản biện',
+        date: Date.now(),
+    }),
+    3: (idReviewer, message) => ({
+        id: statusID.AGREE,
+        label: 'Chấp nhận',
+        date: Date.now(),
+        feedback: { id: idReviewer, msg: message },
+    }),
+    4: (idReviewer, message) => ({
+        id: statusID.DISAGREE,
+        label: 'Không chấp nhận',
+        date: Date.now(),
+        feedback: { id: idReviewer, msg: message },
+    }),
+    5: (message) => ({
+        id: statusID.REQUIRES_EDITING,
+        label: 'Yêu cầu chỉnh sửa',
+        date: Date.now(),
+        feedback: message,
+    }),
+    6: (idAuthor, message) => ({
+        id: statusID.REVISED,
+        label: 'Đã chỉnh sửa',
+        date: Date.now(),
+        feedback: { id: idAuthor, msg: message },
+    }),
+    7: (message) => ({
+        id: statusID.PUBLISHED,
+        label: 'Chấp nhận đăng',
+        date: Date.now(),
+        feedback: message,
+    }),
+    8: (message) => ({
+        id: statusID.REJECT,
+        label: 'Từ chối',
+        date: Date.now(),
+        feedback: message,
+    }),
 }
 
 export default {
@@ -35,6 +81,14 @@ export default {
         return {
             id: statusID.DISAGREE,
             label: 'Không chấp nhận',
+            date: Date.now(),
+            feedback: { order: orderOfReviewer, msg: message },
+        }
+    },
+    requiresEditing(message) {
+        return {
+            id: statusID.REQUIRES_EDITING,
+            label: 'Yêu cầu chỉnh sửa',
             date: Date.now(),
             feedback: { order: orderOfReviewer, msg: message },
         }

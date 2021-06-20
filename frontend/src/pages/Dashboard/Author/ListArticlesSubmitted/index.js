@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
-import data from '../../../data';
+// import data from '../../../data';
 import { TablePagination } from '@material-ui/core';
 const useStyles = makeStyles({
     table: {
