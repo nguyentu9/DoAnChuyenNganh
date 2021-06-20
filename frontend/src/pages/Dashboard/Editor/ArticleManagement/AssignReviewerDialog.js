@@ -10,6 +10,7 @@ import VirtualizedCheckbox from 'react-virtualized-checkbox';
 import { Grid } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
 import reviewerApi from '../../../../api/reviewerApi';
+import articleApi from '../../../../api/articleApi';
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -22,13 +23,21 @@ const useStyles = makeStyles(theme => ({
 export default function AssignReviewerDialog(props) {
     const classes = useStyles();
     const location = useLocation();
-    const { children } = props;
+    const {
+        handleonclick,
+        children,
+        className,
+        color,
+        disabled,
+        size,
+        variant,
+    } = props;
     const [open, setOpen] = useState(false);
     const [reviewers, setReviewers] = useState([]);
     const [checkedReviewers, setCheckedReviewers] = useState([]);
+    const articleID = location.pathname.split('/').slice(-1)[0];
     useEffect(() => {
         async function fetchAllReviewer() {
-            const articleID = location.pathname.split('/').slice(-1)[0];
             try {
                 const data = await reviewerApi.getAll({ articleID });
                 setReviewers(data);
@@ -39,6 +48,18 @@ export default function AssignReviewerDialog(props) {
         fetchAllReviewer();
     }, [location.pathname]);
 
+    useEffect(() => {
+        async function fetchExistsReviewer() {
+            try {
+                const reviewers = await articleApi.getReviewers(articleID);
+                if (reviewers.length > 0) setCheckedReviewers(reviewers);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        fetchExistsReviewer();
+    }, [location.pathname]);
+
     const handleOnClickOpen = () => {
         setOpen(true);
     };
@@ -47,7 +68,10 @@ export default function AssignReviewerDialog(props) {
         setOpen(false);
     };
     const handleOnSendPost = () => {
+        let reviewers = checkedReviewers.map(i => i.value);
+        if (reviewers) handleonclick({ reviewers });
         setOpen(false);
+        setCheckedReviewers([]);
     };
 
     const listReviewers = () => {
@@ -62,7 +86,14 @@ export default function AssignReviewerDialog(props) {
     };
     return (
         <div>
-            <Button {...props} onClick={handleOnClickOpen}>
+            <Button
+                onClick={handleOnClickOpen}
+                className={className}
+                color={color}
+                disabled={disabled}
+                size={size}
+                variant={variant}
+            >
                 {children}
             </Button>
             <Dialog

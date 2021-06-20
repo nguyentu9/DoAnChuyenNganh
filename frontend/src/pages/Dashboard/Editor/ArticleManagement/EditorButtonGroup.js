@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import RequireEditingDialog from './RequireEditingDialog';
 import AssignReviewerDialog from './AssignReviewerDialog';
-import articleApi from '../../../../api/articleApi';
-import { useLocation } from 'react-router-dom';
+import RejectDialog from './RejectDialog';
+import PublishArticleDialog from './PublishArticleDialog';
 
 const statusCodeForBtn = {
     btnEditorReview: 1, //submitted
@@ -15,32 +15,47 @@ const statusCodeForBtn = {
 };
 
 function EditorButtonGroup({ status, handleClick }) {
-    const location = useLocation();
     const classes = useStyles();
     const [btnEditorReview, setBtnEditorReview] = useState(true);
     const [btnRequireEditing, setBtnRequireEditing] = useState(false);
     const [btnAssignReviewer, setBtnAssignReviewer] = useState(false);
     const [btnPublish, setBtnPublish] = useState(false);
-    const [btnReject, setBtnReject] = useState(true);
+    const [btnReject, setBtnReject] = useState(false);
 
     useEffect(() => {
         let lastStatus = status?.slice(-1)[0];
 
-        if (lastStatus?.id === 1) {
+        if (lastStatus?.id === statusCodeForBtn['btnEditorReview']) {
             setBtnEditorReview(false);
             setBtnRequireEditing(true);
             setBtnAssignReviewer(true);
             setBtnPublish(false);
             setBtnReject(true);
         }
-        if (lastStatus?.id === 5) {
+        if (lastStatus?.id === statusCodeForBtn['btnRequireEditing']) {
             setBtnEditorReview(false);
             setBtnRequireEditing(false);
             setBtnAssignReviewer(false);
             setBtnPublish(false);
             setBtnReject(true);
         }
-        if (lastStatus?.id === 8) {
+
+        if (lastStatus?.id === statusCodeForBtn['btnAssignReviewer']) {
+            setBtnEditorReview(false);
+            setBtnRequireEditing(false);
+            setBtnAssignReviewer(false);
+            setBtnPublish(false);
+            setBtnReject(true);
+        }
+        if (lastStatus?.id === statusCodeForBtn['btnPublish']) {
+            setBtnEditorReview(false);
+            setBtnRequireEditing(false);
+            setBtnAssignReviewer(false);
+            setBtnPublish(false);
+            setBtnReject(false);
+        }
+
+        if (lastStatus?.id === statusCodeForBtn['btnReject']) {
             setBtnEditorReview(false);
             setBtnRequireEditing(false);
             setBtnAssignReviewer(false);
@@ -50,35 +65,9 @@ function EditorButtonGroup({ status, handleClick }) {
     }, [status]);
 
     const handleOnClick = btn => async _ => {
-        const articleID = location.pathname.split('/').pop();
-        if (btn === 'btnRequireEditing' && _?.message) {
-            let message = _.message;
-            try {
-                const data = await articleApi.putStatusCode(
-                    articleID,
-                    'editor',
-                    JSON.stringify({
-                        message,
-                        statusCode: statusCodeForBtn[btn],
-                    })
-                );
-            } catch (e) {
-                console.log(e);
-            }
-        }
-
-        if (btn === 'btnReject' && _?.message) {
-        }
-        // let dialog = [
-        //     'btnRequireEditing',
-        //     'btnAssignReviewer',
-        //     'btnReject',
-        // ].includes(btn)
-        //     ? btn
-        //     : '';
-
-        // let statusCode = statusCodeForBtn[btn];
-        // handleClick({ statusCode, role: 'editor', dialog });
+        let { message, reviewers } = _;
+        let statusCode = statusCodeForBtn[btn];
+        handleClick({ role: 'editor', statusCode, message, reviewers });
     };
 
     return (
@@ -114,26 +103,26 @@ function EditorButtonGroup({ status, handleClick }) {
                 Phân công phản biện
             </AssignReviewerDialog>
 
-            <Button
+            <PublishArticleDialog
                 variant='contained'
                 color='primary'
                 size='small'
                 disabled={!btnPublish}
                 className={classes.button}
-                onClick={handleOnClick('btnPublish')}
+                handleonclick={handleOnClick('btnPublish')}
             >
                 Đăng bài
-            </Button>
-            <Button
+            </PublishArticleDialog>
+            <RejectDialog
                 variant='contained'
                 color='secondary'
                 size='small'
                 disabled={!btnReject}
                 className={classes.button}
-                onClick={handleOnClick('btnReject')}
+                handleonclick={handleOnClick('btnReject')}
             >
                 Từ chối xuất bản
-            </Button>
+            </RejectDialog>
         </Grid>
     );
 }

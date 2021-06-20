@@ -1,11 +1,11 @@
-import { Grid, Tab, Tabs, AppBar, Box } from '@material-ui/core';
+import { AppBar, Box, Grid, Tab, Tabs } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, Link, useHistory } from 'react-router-dom';
-import articleApi from '../../../../api/articleApi';
-import TableArticle from '../../TableArticle';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import articleApi from '../../../../api/articleApi';
 import { logout } from '../../../../redux/auth';
+import TableArticle from '../../TableArticle';
 const tabs = [
     {
         id: 0,

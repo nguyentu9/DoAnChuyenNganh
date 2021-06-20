@@ -140,7 +140,7 @@ function TableArticle({ articles }) {
                                                                     key={i}
                                                                     size='small'
                                                                     label={
-                                                                        item.name
+                                                                        item.fullName
                                                                     }
                                                                     style={{
                                                                         margin: '3px',
@@ -196,13 +196,13 @@ function TableArticle({ articles }) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Pagination
+                {/* <Pagination
                     count={5}
                     page={page}
                     size='large'
                     onChange={handlePageChange}
                     style={{ marginTop: '1rem' }}
-                />
+                /> */}
             </Grid>
         </>
     );

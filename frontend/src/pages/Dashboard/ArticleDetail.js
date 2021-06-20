@@ -30,7 +30,6 @@ function ArticleDetail() {
     const classes = useStyles();
     const history = useHistory();
     const location = useLocation();
-    const [_, setForceUpdate] = useState(0);
     let userURL = location.pathname.split('/')[1];
 
     const { articleID } = useParams();
@@ -73,13 +72,13 @@ function ArticleDetail() {
         history.goBack();
     };
 
-    const handleClick = async ({ statusCode, role, dialog }) => {
+    const handleClick = async ({ role, statusCode, message, reviewers }) => {
         if (role === 'editor') {
             try {
                 const lastStatus = await articleApi.putStatusCode(
                     article._id,
                     role,
-                    JSON.stringify({ statusCode })
+                    JSON.stringify({ statusCode, message, reviewers })
                 );
                 // response object lastStatus is { status: Array }
                 if (lastStatus.status > 400) return;

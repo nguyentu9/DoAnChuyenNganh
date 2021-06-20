@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function RequireEditingDialog(props) {
+export default function RejectDialog(props) {
     const {
         handleonclick,
         children,
@@ -53,7 +53,7 @@ export default function RequireEditingDialog(props) {
                 aria-labelledby='form-dialog-title'
             >
                 <DialogTitle id='form-dialog-title'>
-                    YÊU CẦU CHỈNH SỬA
+                    TỪ CHỐI XUẤT BẢN
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>

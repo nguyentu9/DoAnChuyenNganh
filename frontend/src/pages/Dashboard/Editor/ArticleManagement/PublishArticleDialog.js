@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function RequireEditingDialog(props) {
+export default function PublishArticleDialog(props) {
     const {
         handleonclick,
         children,
@@ -17,8 +16,7 @@ export default function RequireEditingDialog(props) {
         size,
         variant,
     } = props;
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = useState('');
+    const [open, setOpen] = useState(false);
     const handleOnClickOpen = () => {
         setOpen(true);
     };
@@ -26,13 +24,8 @@ export default function RequireEditingDialog(props) {
         setOpen(false);
     };
     const handleOnSendPost = () => {
-        handleonclick({ message });
-        setMessage('');
+        handleonclick();
         setOpen(false);
-    };
-
-    const handleOnChange = e => {
-        setMessage(e.target.value);
     };
 
     return (
@@ -53,34 +46,18 @@ export default function RequireEditingDialog(props) {
                 aria-labelledby='form-dialog-title'
             >
                 <DialogTitle id='form-dialog-title'>
-                    YÊU CẦU CHỈNH SỬA
+                    XUẤT BẢN BÀI BÁO
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Nhập phản hồi vào ô bên dưới để gửi đến tác giả.
+                        Bạn có chắc chắn muốn xuất bản ?
                     </DialogContentText>
-                    <TextField
-                        onChange={handleOnChange}
-                        margin='dense'
-                        multiline
-                        rows={5}
-                        value={message}
-                        id='name'
-                        type='email'
-                        fullWidth
-                        variant='outlined'
-                        placeholder='Nhập phản hồi... ít nhất 10 ký tự'
-                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleOnClose} color='primary'>
                         Huỷ
                     </Button>
-                    <Button
-                        onClick={handleOnSendPost}
-                        color='primary'
-                        disabled={message.length <= 10 ? true : false}
-                    >
+                    <Button onClick={handleOnSendPost} color='primary'>
                         Gửi
                     </Button>
                 </DialogActions>
