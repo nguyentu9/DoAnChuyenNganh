@@ -25,16 +25,16 @@ const urlMappingUser = {
 };
 
 function TableArticle({ articles }) {
+    // const [page, setPage] = useState(1);
     const history = useHistory();
     const location = useLocation();
-    const [page, setPage] = useState(1);
     let userURL = location.pathname.split('/')[1];
     const handleNavigation = articleID => _ => {
         history.push(`/${userURL}/bai-bao/${articleID}`);
     };
-    const handlePageChange = (event, value) => {
-        setPage(value);
-    };
+    // const handlePageChange = (event, value) => {
+    //     setPage(value);
+    // };
     const classes = useStyles();
     let n = 1;
     return (
@@ -71,7 +71,7 @@ function TableArticle({ articles }) {
                         </TableHead>
                         <TableBody>
                             {articles &&
-                                articles.map(article => (
+                                articles?.map(article => (
                                     <Tooltip
                                         title='Nhấn vào để xem chi tiết'
                                         placement='top'

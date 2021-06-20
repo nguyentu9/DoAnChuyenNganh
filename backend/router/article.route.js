@@ -1,5 +1,8 @@
 import { Router } from 'express'
-import { fetchAllTypes } from '../controller/article.controller.js'
+import {
+    fetchAllArticleWithRoleReviewer,
+    fetchAllTypes,
+} from '../controller/article.controller.js'
 import { isAdmin, signIn } from '../middleware/auth.mdw.js'
 import { Article } from '../models/articleModel.js'
 import mongoose from 'mongoose'
@@ -10,6 +13,8 @@ router.get('/', () => {})
 router.get('/hot-articles', () => {})
 router.get('/newsest-articles', () => {})
 router.get('/types', fetchAllTypes)
+
+router.get('/role/reviewer', signIn, fetchAllArticleWithRoleReviewer)
 
 // [PUT] push status object into article's status
 router.put(
@@ -176,6 +181,33 @@ router.get('/:articleID/role/editor', signIn, isAdmin, async (req, res) => {
         })
     }
 })
+router.get('/:articleID/role/reviewer', signIn, async (req, res) => {
+    const { articleID } = req.params
+    const reviewer = req.user.id
+    try {
+        let article = await Article.findOne(
+            {
+                _id: mongoose.Types.ObjectId(articleID),
+                reviewer: { $elemMatch: { _id: reviewer } },
+            },
+            {
+                title: 1,
+                type: 1,
+                brief: 1,
+                keyWord: 1,
+                status: 1,
+                attachments: 1,
+                receivedDate: 1,
+            }
+        )
+        return res.json(article)
+    } catch (e) {
+        return res.json({
+            status: 404,
+            message: 'Không tìm thấy bài báo',
+        })
+    }
+})
 
 router.get('/role/editor', signIn, isAdmin, async (req, res) => {
     const { status, limit, skip } = req.query
@@ -273,13 +305,10 @@ router.get('/:articleID/role/:userRole', signIn, async (req, res) => {
             console.log(e)
         }
     }
-
-    if (userRole === 'reviewer') {
-    }
 })
 
 // Fetch all article with corresponding role
-router.get('/role/:userRole', signIn, async (req, res) => {
+router.get('/role/author', signIn, async (req, res) => {
     const { userRole } = req.params
     if (userRole === 'author') {
         try {
@@ -291,9 +320,6 @@ router.get('/role/:userRole', signIn, async (req, res) => {
         } catch (e) {
             console.log(e)
         }
-    }
-
-    if (userRole === 'reviewer') {
     }
 })
 

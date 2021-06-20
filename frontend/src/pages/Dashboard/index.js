@@ -9,12 +9,14 @@ import {
     Menu,
     MenuItem,
     Toolbar,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+// import NotificationsIcon from '@material-ui/icons/Notifications';
+import HomeIcon from '@material-ui/icons/Home';
 import clsx from 'classnames';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,12 +26,15 @@ import ArticleDetail from './ArticleDetail';
 import ArticleSubmissionForm from './Author/ArticleSubmissionForm/index';
 import ListArticles from './Author/ListArticles/index';
 import ListArticlesSubmitted from './Author/ListArticlesSubmitted/index';
-
 import ArticleManagement from './Editor/ArticleManagement/index';
 import JournalManagement from './Editor/JournalManagement/index';
 import LayoutManagement from './Editor/LayoutManagement/index';
 import UserManagement from './Editor/UserManagement/index';
 import ListMenu from './ListMenu';
+
+import ListArticlesOfReviewer from './Reviewer/ListArticles/index';
+import ListArticlesReviewed from './Reviewer/ListArticlesReviewed/index';
+
 const drawerWidth = 240;
 
 function Dashboard() {
@@ -91,8 +96,17 @@ function Dashboard() {
                         Bảng điều khiển
                     </Typography>
                     <IconButton color='inherit'>
-                        <Badge badgeContent={4} color='secondary'>
+                        {/* <Badge badgeContent={4} color='secondary'>
                             <NotificationsIcon />
+                        </Badge> */}
+                        <Badge color='secondary'>
+                            <Tooltip
+                                title='Về trang chủ'
+                                placement='bottom'
+                                arrow
+                            >
+                                <HomeIcon onClick={() => history.push('/')} />
+                            </Tooltip>
                         </Badge>
                     </IconButton>
                     <IconButton onClick={handleMenu}>
@@ -171,10 +185,23 @@ function Dashboard() {
                             component={ArticleDetail}
                         />
 
-                        <Route exact path='/phan-bien/phan-bien-bai-bao' />
+                        <Route
+                            exact
+                            path='/phan-bien/phan-bien-bai-bao'
+                            component={ListArticlesOfReviewer}
+                        />
+                        <Route
+                            exact
+                            path='/phan-bien/bai-bao/:articleID'
+                            component={ArticleDetail}
+                        />
 
                         <Route exact path='/phan-bien/chap-nhan-chinh-sua' />
-                        <Route exact path='/phan-bien/bai-bao-da-phan-bien' />
+                        <Route
+                            exact
+                            path='/phan-bien/bai-bao-da-phan-bien'
+                            component={ListArticlesReviewed}
+                        />
 
                         <Route
                             exact

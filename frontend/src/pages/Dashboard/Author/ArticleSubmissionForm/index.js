@@ -89,7 +89,6 @@ function ArticleSubmissionForm() {
                 .post('http://localhost:3001/api/v1/articles', data, config)
                 .then(res => {
                     notify();
-                    console.log(JSON.stringify(res.data));
                 })
                 .catch(e => alert(`Send Article Error - ${e}`));
         },

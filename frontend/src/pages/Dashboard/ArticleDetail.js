@@ -20,6 +20,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import articleApi from '../../api/articleApi';
 import convertDate from '../../services/convertDate';
 import EditorButtonGroup from './Editor/ArticleManagement/EditorButtonGroup';
+import ReviewerButtonGroup from './Reviewer/ListArticles/ReviewerButtonGroup';
 
 const urlMappingUser = {
     'tac-gia': 'author',
@@ -73,19 +74,17 @@ function ArticleDetail() {
     };
 
     const handleClick = async ({ role, statusCode, message, reviewers }) => {
-        if (role === 'editor') {
-            try {
-                const lastStatus = await articleApi.putStatusCode(
-                    article._id,
-                    role,
-                    JSON.stringify({ statusCode, message, reviewers })
-                );
-                // response object lastStatus is { status: Array }
-                if (lastStatus.status > 400) return;
-                setLastStatus(lastStatus.status);
-            } catch (e) {
-                console.log(e);
-            }
+        try {
+            const lastStatus = await articleApi.putStatusCode(
+                article._id,
+                role,
+                JSON.stringify({ statusCode, message, reviewers })
+            );
+            // response object lastStatus is { status: Array }
+            if (lastStatus.status > 400) return;
+            setLastStatus(lastStatus.status);
+        } catch (e) {
+            console.log(e);
         }
     };
 
@@ -158,20 +157,22 @@ function ArticleDetail() {
                         ))}
                     </Grid>
                 </Grid>
-                <Grid container item xs={12} className={classes.gridBoder}>
-                    <Grid item sx={6} sm={4} className={classes.gridLabel}>
-                        <h4>Tác giả/đồng tác giả</h4>
+                {urlMappingUser[userURL] !== 'reviewer' && (
+                    <Grid container item xs={12} className={classes.gridBoder}>
+                        <Grid item sx={6} sm={4} className={classes.gridLabel}>
+                            <h4>Tác giả/đồng tác giả</h4>
+                        </Grid>
+                        <Grid item sx={6} sm={8} className={classes.gridBody}>
+                            {article.author?.map((_author, i) => (
+                                <div key={i}>{`${i + 1}. ${
+                                    _author.fullName
+                                }   -   email: ${_author.email}   -   đơn vị: ${
+                                    _author.org
+                                }`}</div>
+                            ))}
+                        </Grid>
                     </Grid>
-                    <Grid item sx={6} sm={8} className={classes.gridBody}>
-                        {article.author?.map((_author, i) => (
-                            <div key={i}>{`${i + 1}. ${
-                                _author.fullName
-                            }   -   email: ${_author.email}   -   đơn vị: ${
-                                _author.org
-                            }`}</div>
-                        ))}
-                    </Grid>
-                </Grid>
+                )}
                 <Grid container item xs={12} className={classes.gridBoder}>
                     <Grid item sx={12} sm={4} className={classes.gridLabel}>
                         <h4>Danh sách tập tin đính kèm:</h4>
@@ -225,6 +226,14 @@ function ArticleDetail() {
             <Grid container direction={'row'} justify={'center'}>
                 {urlMappingUser[userURL] === 'editor' && (
                     <EditorButtonGroup
+                        status={
+                            lastStatus.length > 0 ? lastStatus : article.status
+                        }
+                        handleClick={handleClick}
+                    />
+                )}
+                {urlMappingUser[userURL] === 'reviewer' && (
+                    <ReviewerButtonGroup
                         status={
                             lastStatus.length > 0 ? lastStatus : article.status
                         }
