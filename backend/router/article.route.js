@@ -15,6 +15,18 @@ router.get('/newsest-articles', () => {})
 router.get('/types', fetchAllTypes)
 
 router.get('/role/reviewer', signIn, fetchAllArticleWithRoleReviewer)
+// Fetch all article with corresponding role
+router.get('/role/author', signIn, async (req, res) => {
+    try {
+        const article = await Article.find(
+            { 'author.0._id': req.user.id },
+            { status: { $slice: -1 }, title: 1, type: 1, receivedDate: 1 }
+        )
+        return res.json(article)
+    } catch (e) {
+        console.log(e)
+    }
+})
 
 // [PUT] push status object into article's status
 router.put(
@@ -300,22 +312,6 @@ router.get('/:articleID/role/:userRole', signIn, async (req, res) => {
                     message: 'Không tìm thấy bài báo',
                 })
             }
-            return res.json(article)
-        } catch (e) {
-            console.log(e)
-        }
-    }
-})
-
-// Fetch all article with corresponding role
-router.get('/role/author', signIn, async (req, res) => {
-    const { userRole } = req.params
-    if (userRole === 'author') {
-        try {
-            const article = await Article.find(
-                { 'author.0._id': req.user.id },
-                { status: { $slice: -1 }, title: 1, type: 1, receivedDate: 1 }
-            )
             return res.json(article)
         } catch (e) {
             console.log(e)

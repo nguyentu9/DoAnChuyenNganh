@@ -167,7 +167,6 @@ function Dashboard() {
                         />
 
                         <Route
-                            exact
                             path='/tac-gia/tat-ca-bai-bao'
                             component={ListArticles}
                         />
